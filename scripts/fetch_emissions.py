@@ -9,28 +9,39 @@ from pathlib import Path
 IST = timezone(timedelta(hours=2))
 START_TIME = datetime(2026, 11, 22, 9, 0, 0, tzinfo=IST)
 
+
+def get_env_str(key: str, default: str) -> str:
+    val = os.environ.get(key)
+    return val.strip() if val and val.strip() else default
+
+
+def get_env_float(key: str, default: float) -> float:
+    val = os.environ.get(key)
+    return float(val.strip()) if val and val.strip() else default
+
+
 FLOW_RATES_NM3_H = {
-    "CH6": float(os.environ.get("FLOW_RATE_CH6", 102100)),
-    "CH7": float(os.environ.get("FLOW_RATE_CH7", 102100)),
+    "CH6": get_env_float("FLOW_RATE_CH6", 102100.0),
+    "CH7": get_env_float("FLOW_RATE_CH7", 102100.0),
 }
 
-API_BASE_URL = os.environ.get(
+API_BASE_URL = get_env_str(
     "SVIVA_API_URL",
-    "https://air-fapi.sviva.gov.il/v1/envista/stations"
+    "https://air-fapi.sviva.gov.il/v1/envista/stations",
 ).rstrip("/")
 
 STATIONS_CONFIG = {
     "CH6": {
-        "station_id": os.environ.get("CH6_STATION_ID", "461").strip(),
-        "filter_channels": os.environ.get("CH6_CHANNELS", "2,4,8").strip(),
-        "nox_channel_id": os.environ.get("CH6_NOX_CHANNEL_ID", "2").strip(),
-        "co_channel_id": os.environ.get("CH6_CO_CHANNEL_ID", "4").strip(),
+        "station_id": get_env_str("CH6_STATION_ID", "461"),
+        "filter_channels": get_env_str("CH6_CHANNELS", "2,4,8"),
+        "nox_channel_id": get_env_str("CH6_NOX_CHANNEL_ID", "2"),
+        "co_channel_id": get_env_str("CH6_CO_CHANNEL_ID", "4"),
     },
     "CH7": {
-        "station_id": os.environ.get("CH7_STATION_ID", "462").strip(),
-        "filter_channels": os.environ.get("CH7_CHANNELS", "2,4,8").strip(),
-        "nox_channel_id": os.environ.get("CH7_NOX_CHANNEL_ID", "2").strip(),
-        "co_channel_id": os.environ.get("CH7_CO_CHANNEL_ID", "4").strip(),
+        "station_id": get_env_str("CH7_STATION_ID", "462"),
+        "filter_channels": get_env_str("CH7_CHANNELS", "2,4,8"),
+        "nox_channel_id": get_env_str("CH7_NOX_CHANNEL_ID", "2"),
+        "co_channel_id": get_env_str("CH7_CO_CHANNEL_ID", "4"),
     },
 }
 
@@ -58,7 +69,8 @@ def fetch_window(station_id: str, filter_channels: str, start_dt: datetime, end_
         "includeSummary": "false",
         "onlySummary": "false",
     }
-    url = f"{API_BASE_URL}/{station_id}/Average?{urllib.parse.urlencode(params)}"
+    query_str = urllib.parse.urlencode(params, safe=",:")
+    url = f"{API_BASE_URL}/{station_id}/Average?{query_str}"
 
     req = urllib.request.Request(
         url,
@@ -172,6 +184,25 @@ def calculate_station_totals(records: list, station_key: str, cfg: dict) -> dict
     }
 
 
+def write_initial_json():
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    initial = {
+        "lastUpdated": START_TIME.isoformat(),
+        "startDate": START_TIME.isoformat(),
+        "permitNumber": "2211",
+        "siteId": "360767",
+        "sourceStatus": "initialized",
+        "flowRatesNm3h": FLOW_RATES_NM3_H,
+        "stations": {
+            "CH6": {"NOx_kg": 0, "CO_kg": 0, "avg_NOx_mg_nm3": 0, "avg_CO_mg_nm3": 0, "samplesCount": 0},
+            "CH7": {"NOx_kg": 0, "CO_kg": 0, "avg_NOx_mg_nm3": 0, "avg_CO_mg_nm3": 0, "samplesCount": 0},
+        },
+        "totals": {"NOx_kg": 0, "CO_kg": 0, "NOx_tons": 0, "CO_tons": 0},
+    }
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(initial, f, ensure_ascii=False, indent=2)
+
+
 def main():
     now_ist = datetime.now(IST)
     existing_data = {}
@@ -189,6 +220,8 @@ def main():
                 now_ist,
             )
             print(f"[{st_key}] בדיקת תקשורת (תחנה {cfg['station_id']}) הצליחה! התקבלו {len(test_records)} רשומות שעתיות.")
+        if not OUTPUT_PATH.exists():
+            write_initial_json()
         return
 
     stations_result = {}
