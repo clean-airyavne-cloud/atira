@@ -97,50 +97,64 @@ class EnvistaClient:
         return ""
 
     def generate_token(self) -> str:
-        """שולח בקשת POST ל-GenerateToken עם ApiToken ומחלץ את עוגיית X-Access-Token."""
+        """שולח בקשת POST ל-GenerateToken עם ApiToken וגוף JSON תקני."""
         if not self.api_token:
             raise RuntimeError("משתנה הסביבה SVIVA_API_TOKEN חסר. יש להגדירו ב-GitHub Secrets.")
         if self.access_token:
             return self.access_token
 
-        headers = {
-            **BASE_HEADERS,
-            "Authorization": f"ApiToken {self.api_token}",
-        }
-        req = urllib.request.Request(TOKEN_URL, data=b"", headers=headers, method="POST")
+        payload_candidates = [
+            ("application/json", b'{"userName":"EGuest"}'),
+            ("application/json", b'{"UserName":"EGuest"}'),
+            ("application/json", b"{}"),
+            ("application/x-www-form-urlencoded", b"userName=EGuest"),
+        ]
 
-        try:
-            with self.opener.open(req, timeout=25) as resp:
-                tok = self._extract_cookie_from_headers(resp.headers)
-                body = resp.read().decode("utf-8", errors="ignore").strip()
-                if not tok and body:
-                    if body.startswith("eyJ"):
-                        tok = body.strip('"')
-                    else:
-                        try:
-                            parsed = json.loads(body)
-                            if isinstance(parsed, str) and parsed.startswith("eyJ"):
-                                tok = parsed
-                            elif isinstance(parsed, dict):
-                                tok = (
-                                    parsed.get("token")
-                                    or parsed.get("accessToken")
-                                    or parsed.get("access_token")
-                                    or parsed.get("jwtToken")
-                                    or ""
-                                )
-                        except Exception:
-                            pass
-        except urllib.error.HTTPError as err:
-            err_body = err.read().decode("utf-8", errors="ignore")[:300]
-            raise RuntimeError(f"GenerateToken נכשל עם HTTP {err.code}: {err_body}") from err
+        last_err = None
+        for idx, (content_type, body_bytes) in enumerate(payload_candidates, start=1):
+            headers = {
+                **BASE_HEADERS,
+                "Content-Type": content_type,
+                "Authorization": f"ApiToken {self.api_token}",
+            }
+            req = urllib.request.Request(TOKEN_URL, data=body_bytes, headers=headers, method="POST")
 
-        if not tok:
-            raise RuntimeError("GenerateToken הצליח אך לא התקבל X-Access-Token בתגובה.")
+            try:
+                with self.opener.open(req, timeout=25) as resp:
+                    tok = self._extract_cookie_from_headers(resp.headers)
+                    body = resp.read().decode("utf-8", errors="ignore").strip()
+                    if not tok and body:
+                        if body.startswith("eyJ"):
+                            tok = body.strip('"')
+                        else:
+                            try:
+                                parsed = json.loads(body)
+                                if isinstance(parsed, str) and parsed.startswith("eyJ"):
+                                    tok = parsed
+                                elif isinstance(parsed, dict):
+                                    tok = (
+                                        parsed.get("token")
+                                        or parsed.get("accessToken")
+                                        or parsed.get("access_token")
+                                        or parsed.get("jwtToken")
+                                        or ""
+                                    )
+                            except Exception:
+                                pass
 
-        self.access_token = tok
-        print("התקבלה עוגיית X-Access-Token חדשה מ-GenerateToken בהצלחה.")
-        return tok
+                    if tok:
+                        self.access_token = tok
+                        print(f"התקבלה עוגיית X-Access-Token חדשה מ-GenerateToken בהצלחה (ניסיון {idx}).")
+                        return tok
+            except urllib.error.HTTPError as err:
+                err_body = err.read().decode("utf-8", errors="ignore")[:300]
+                print(f"GenerateToken ניסיון {idx} החזיר HTTP {err.code}: {err_body}")
+                last_err = err
+            except Exception as exc:
+                print(f"GenerateToken ניסיון {idx} נכשל: {exc}")
+                last_err = exc
+
+        raise RuntimeError(f"GenerateToken נכשל בכל הניסיונות: {last_err}")
 
     def get_json(self, url: str):
         jwt_cookie = self.generate_token()
