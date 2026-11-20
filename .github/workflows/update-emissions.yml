@@ -1,0 +1,52 @@
+name: Update Ashdod Permit 2211 Emissions Data
+
+on:
+  schedule:
+    # רץ אוטומטית מדי שעה עגולה (בדקה ה-05)
+    - cron: '5 * * * *'
+  # מאפשר להריץ בדיקה ידנית בלחיצת כפתור מתוך ממשק GitHub
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fetch latest stack monitoring data
+        env:
+          SVIVA_API_URL: ${{ vars.SVIVA_API_URL }}
+          CH6_STATION_ID: ${{ vars.CH6_STATION_ID }}
+          CH6_CHANNELS: ${{ vars.CH6_CHANNELS }}
+          CH6_NOX_CHANNEL_ID: ${{ vars.CH6_NOX_CHANNEL_ID }}
+          CH6_CO_CHANNEL_ID: ${{ vars.CH6_CO_CHANNEL_ID }}
+          CH7_STATION_ID: ${{ vars.CH7_STATION_ID }}
+          CH7_CHANNELS: ${{ vars.CH7_CHANNELS }}
+          CH7_NOX_CHANNEL_ID: ${{ vars.CH7_NOX_CHANNEL_ID }}
+          CH7_CO_CHANNEL_ID: ${{ vars.CH7_CO_CHANNEL_ID }}
+          FLOW_RATE_CH6: ${{ vars.FLOW_RATE_CH6 }}
+          FLOW_RATE_CH7: ${{ vars.FLOW_RATE_CH7 }}
+        run: |
+          python scripts/fetch_emissions.py
+
+      - name: Commit and push updated JSON if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/emissions.json
+          if git diff --staged --quiet; then
+            echo "אין שינוי בנתונים, מדלג על commit."
+          else
+            git commit -m "chore: update emissions data $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
