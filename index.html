@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הדיון נדחה. הזמן חולף — והזיהום באשדוד נמשך | היתר פליטה 2211</title>
+  <meta name="description" content="מעקב רציף אחר פליטות NOx ו-CO מארובות CH6 (203712) ו-CH7 (203713) של תחנת הכוח במתקן ההתפלה באשדוד (היתר 2211, אתר 360767) מאז דחיית הדיון בבג״ץ (22.11.2026)." />
+
+  <!-- Open Graph / Social Sharing Metadata -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="הדיון נדחה. הזמן חולף — והזיהום באשדוד נמשך | היתר פליטה 2211" />
+  <meta property="og:description" content="עתירת שומרי הבית ומגמה ירוקה: כל יום של דחייה מאפשר המשך פליטת NOx, CO ופורמאלדהיד ממנועי בעירה פנימית מיושנים במתקן ההתפלה באשדוד." />
+
+  <!-- Google Fonts: Heebo, Assistant & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Heebo', 'Assistant', 'system-ui', 'sans-serif'],
+            assistant: ['Assistant', 'Heebo', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            asphalt: '#090a0f',
+            surface: '#11141d',
+            surfaceElevated: '#171b27',
+            borderDark: '#222838',
+            ember: '#f97316',
+            crimson: '#ef4444',
+            offWhite: '#f8fafc',
+            mutedSlate: '#94a3b8',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #090a0f;
+      color: #f8fafc;
+      font-family: 'Heebo', 'Assistant', sans-serif;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090a0f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #222838;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    .tabular-nums-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    /* Dramatic Smokestack Plumes & Warning Beacons */
+    @keyframes plumeDriftLeft {
+      0% {
+        transform: translate(0px, 0px) scale(0.7);
+        opacity: 0;
+      }
+      18% {
+        opacity: 0.48;
+      }
+      65% {
+        opacity: 0.24;
+      }
+      100% {
+        transform: translate(-75px, -255px) scale(2.65);
+        opacity: 0;
+      }
+    }
+
+    @keyframes plumeDriftWide {
+      0% {
+        transform: translate(0px, 0px) scale(0.75);
+        opacity: 0;
+      }
+      22% {
+        opacity: 0.42;
+      }
+      68% {
+        opacity: 0.18;
+      }
+      100% {
+        transform: translate(-110px, -285px) scale(3.0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes stackBeaconPulse {
+      0%, 100% {
+        opacity: 1;
+        filter: drop-shadow(0 0 10px #ef4444);
+      }
+      50% {
+        opacity: 0.22;
+        filter: none;
+      }
+    }
+
+    .plume-1 { animation: plumeDriftLeft 9.5s ease-out infinite; }
+    .plume-2 { animation: plumeDriftLeft 9.5s ease-out 3.1s infinite; }
+    .plume-3 { animation: plumeDriftLeft 9.5s ease-out 6.2s infinite; }
+    .plume-4 { animation: plumeDriftWide 11s ease-out 1.4s infinite; }
+    .plume-5 { animation: plumeDriftWide 11s ease-out 5.1s infinite; }
+    .plume-6 { animation: plumeDriftWide 11s ease-out 8.6s infinite; }
+    .beacon-flash { animation: stackBeaconPulse 2s ease-in-out infinite; }
+
+    .hero-grid-overlay {
+      background-image:
+        linear-gradient(to right, rgba(34, 40, 56, 0.32) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 40, 56, 0.32) 1px, transparent 1px);
+      background-size: 42px 42px;
+    }
+
+    input[type="range"] {
+      accent-color: #f97316;
+    }
+  </style>
+</head>
+<body class="bg-asphalt text-offWhite antialiased selection:bg-crimson/30 selection:text-white">
+
+  <!-- Non-blocking Toast Notification (Replaces alert()) -->
+  <div id="toast-notification" role="status" aria-live="polite"
+       class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
+    <div class="bg-surfaceElevated border border-ember/60 text-offWhite px-5 py-3 rounded-2xl shadow-2xl shadow-black/90 flex items-center gap-3 text-sm font-medium">
+      <span class="w-2.5 h-2.5 rounded-full bg-ember animate-ping"></span>
+      <span id="toast-message">הקישור ונתוני הפליטה הועתקו ללוח!</span>
+    </div>
+  </div>
+
+  <!-- 1. COMPACT TOP SIMULATION & PREVIEW BAR -->
+  <nav aria-label="סרגל מצב תצוגה והדמיה" class="sticky top-0 z-40 bg-[#0b0d14]/95 backdrop-blur-md border-b border-borderDark">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2.5 text-xs sm:text-sm">
+      <div class="flex items-center gap-2 text-mutedSlate">
+        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ember/15 text-ember border border-ember/30">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+        <span class="font-bold text-offWhite">מצב תצוגה / הדמיה:</span>
+        <span id="sim-indicator-text" class="hidden md:inline text-mutedSlate">מעקב חי ממועד הדיון שנדחה (22/11/2026 09:00)</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="בחירת מצב תצוגה">
+        <button type="button" data-sim-days="realtime"
+                class="sim-btn active-sim px-3 py-1.5 rounded-xl font-bold transition-all border border-crimson bg-crimson/20 text-white text-xs">
+          זמן אמת (מ-22/11/2026 09:00)
+        </button>
+        <button type="button" data-sim-days="3"
+                class="sim-btn px-3 py-1.5 rounded-xl font-medium transition-all border border-borderDark bg-surface hover:bg-surfaceElevated text-mutedSlate hover:text-offWhite text-xs">
+          +3 ימים
+        </button>
+        <button type="button" data-sim-days="14"
+                class="sim-btn px-3 py-1.5 rounded-xl font-medium transition-all border border-borderDark bg-surface hover:bg-surfaceElevated text-mutedSlate hover:text-offWhite text-xs">
+          +14 ימים
+        </button>
+        <button type="button" data-sim-days="45"
+                class="sim-btn px-3 py-1.5 rounded-xl font-medium transition-all border border-borderDark bg-surface hover:bg-surfaceElevated text-mutedSlate hover:text-offWhite text-xs">
+          +45 ימים
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 2. HERO SECTION -->
+  <header class="relative overflow-hidden border-b border-borderDark hero-grid-overlay">
+    <!-- Dramatic Atmospheric Background + Optional External Photo + Built-in Realistic SVG Smokestacks -->
+    <div class="absolute inset-0 pointer-events-none select-none">
+      <!-- Optional user-supplied photographic image (hidden gracefully if absent) -->
+      <img src="./assets/hero-pollution.png"
+           alt="ארובות תחנת הכוח במתקן ההתפלה באשדוד פולטות עשן ואדים לשמיים כהים"
+           onerror="this.style.display='none'"
+           class="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
+
+      <!-- Deep Asphalt & Fiery Ember Atmospheric Glows -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#090a0f]/75 via-[#090a0f]/82 to-[#090a0f]"></div>
+      <div class="absolute -top-28 right-1/4 w-[820px] h-[420px] bg-crimson/15 blur-[140px] rounded-full"></div>
+      <div class="absolute top-16 left-1/4 w-[680px] h-[340px] bg-ember/15 blur-[130px] rounded-full"></div>
+
+      <!-- Built-in Dramatic Smokestacks & Toxic Smoke Silhouette (CH6 & CH7) -->
+      <svg class="absolute bottom-0 left-0 w-full h-[380px] sm:h-[470px] opacity-90" viewBox="0 0 1440 470" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <radialGradient id="smokeCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#64748b" stop-opacity="0.52" />
+            <stop offset="50%" stop-color="#334155" stop-opacity="0.28" />
+            <stop offset="100%" stop-color="#090a0f" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="emberSmoke" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#f97316" stop-opacity="0.24" />
+            <stop offset="38%" stop-color="#ef4444" stop-opacity="0.18" />
+            <stop offset="70%" stop-color="#1e293b" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#090a0f" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="stackBody" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#090b10" />
+            <stop offset="42%" stop-color="#1e2433" />
+            <stop offset="100%" stop-color="#0b0e16" />
+          </linearGradient>
+        </defs>
+
+        <!-- Rising Toxic Smoke Plumes from Stack CH6 -->
+        <g transform="translate(275, 165)">
+          <circle class="plume-1" cx="0" cy="0" r="52" fill="url(#emberSmoke)" />
+          <circle class="plume-2" cx="14" cy="-6" r="60" fill="url(#smokeCore)" />
+          <circle class="plume-3" cx="-10" cy="4" r="56" fill="url(#emberSmoke)" />
+        </g>
+
+        <!-- Rising Toxic Smoke Plumes from Stack CH7 -->
+        <g transform="translate(435, 145)">
+          <circle class="plume-4" cx="0" cy="0" r="56" fill="url(#emberSmoke)" />
+          <circle class="plume-5" cx="-12" cy="-5" r="64" fill="url(#smokeCore)" />
+          <circle class="plume-6" cx="10" cy="3" r="58" fill="url(#emberSmoke)" />
+        </g>
+
+        <!-- Secondary Distant Plume (CHP Stacks CH1-CH5) -->
+        <g transform="translate(650, 210)" opacity="0.55">
+          <circle class="plume-2" cx="0" cy="0" r="44" fill="url(#smokeCore)" />
+          <circle class="plume-5" cx="15" cy="5" r="48" fill="url(#emberSmoke)" />
+        </g>
+
+        <!-- Industrial Desalination & Power Plant Horizon Silhouette -->
+        <path d="M0,470 L0,410 L110,410 L135,368 L225,368 L225,392 L505,392 L530,348 L740,348 L765,398 L1440,398 L1440,470 Z" fill="#0c0f17" />
+
+        <!-- Stack CH6 (ID 203712) -->
+        <polygon points="256,396 265,165 285,165 294,396" fill="url(#stackBody)" stroke="#222838" stroke-width="1" />
+        <rect x="262" y="182" width="26" height="6" fill="#ef4444" opacity="0.75" />
+        <circle class="beacon-flash" cx="275" cy="160" r="4.5" fill="#ef4444" />
+        <text x="275" y="226" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" text-anchor="middle" opacity="0.75">CH6</text>
+
+        <!-- Stack CH7 (ID 203713) -->
+        <polygon points="414,396 424,145 446,145 456,396" fill="url(#stackBody)" stroke="#222838" stroke-width="1" />
+        <rect x="421" y="162" width="28" height="6" fill="#f97316" opacity="0.8" />
+        <circle class="beacon-flash" cx="435" cy="140" r="4.5" fill="#ef4444" />
+        <text x="435" y="208" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" text-anchor="middle" opacity="0.75">CH7</text>
+
+        <!-- Industrial Piping & Heat Recovery Units -->
+        <rect x="565" y="300" width="115" height="94" rx="5" fill="#0e121b" stroke="#222838" stroke-width="1" />
+        <line x1="292" y1="332" x2="565" y2="332" stroke="#222838" stroke-width="4" />
+        <line x1="292" y1="348" x2="565" y2="348" stroke="#222838" stroke-width="3" />
+      </svg>
+    </div>
+
+    <!-- Hero Foreground Content -->
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-14 sm:pt-14 sm:pb-20">
+      <!-- Urgent Status Badge -->
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <span class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-crimson/15 border border-crimson/45 text-crimson text-xs sm:text-sm font-extrabold tracking-wide shadow-lg shadow-crimson/10">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-crimson opacity-85"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-crimson"></span>
+          </span>
+          עתירת שומרי הבית ומגמה ירוקה | היתר פליטה מס' 2211 (אתר 360767)
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface/90 border border-borderDark text-mutedSlate text-xs font-medium">
+          אזה״ת צפוני אשדוד • תחנת כוח ומתקן התפלה
+        </span>
+      </div>
+
+      <!-- Main Power Headline -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-offWhite leading-[1.08] mb-5">
+        הדיון נדחה.
+        <span class="block text-transparent bg-clip-text bg-gradient-to-l from-crimson via-ember to-amber-400 mt-1">
+          הזמן חולף — והזיהום באשדוד נמשך.
+        </span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="max-w-3xl text-base sm:text-xl text-slate-300 font-assistant leading-relaxed mb-8">
+        כל יום שבו ההכרעה המשפטית מתעכבת מאפשר הפעלת <strong class="text-offWhite font-bold">מנועי בעירה פנימית מיושנים</strong> בתחנת הכוח שבמתקן ההתפלה באשדוד — בלב אזור מוכה זיהום אוויר, תוך פליטה מתמשכת של <strong class="text-ember font-bold">תחמוצות חנקן (<span class="font-mono">NOx</span>)</strong>, <strong class="text-ember font-bold">פחמן חד-חמצני (<span class="font-mono">CO</span>)</strong> ו<strong class="text-crimson font-bold">פורמאלדהיד (<span class="font-mono">CH₂O</span>)</strong> המסרטן.
+      </p>
+
+      <!-- Live Elapsed / Countdown Clock Card inside Hero -->
+      <div class="bg-surface/95 backdrop-blur-md border border-borderDark rounded-3xl p-5 sm:p-7 shadow-2xl shadow-black/80 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-5 border-b border-borderDark">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-crimson animate-pulse"></span>
+            <h2 id="clock-status-title" class="text-sm sm:text-base font-extrabold text-offWhite">
+              הזמן שחלף מאז מועד הדיון המקורי: יום ראשון, 22/11/2026 בשעה 09:00
+            </h2>
+          </div>
+          <span id="clock-subtitle-pill" class="inline-flex items-center px-3 py-1 rounded-full bg-ember/15 border border-ember/35 text-ember text-xs font-bold self-start md:self-auto">
+            כל שנייה של דחייה מוסיפה מזהמים לאוויר
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-5">
+          <div class="bg-[#090a0f] border border-borderDark rounded-2xl p-3.5 sm:p-5 text-center">
+            <div id="clock-days" class="tabular-nums-mono text-3xl sm:text-5xl font-extrabold text-offWhite">00</div>
+            <div class="text-xs sm:text-sm font-bold text-mutedSlate mt-1.5">ימים</div>
+          </div>
+          <div class="bg-[#090a0f] border border-borderDark rounded-2xl p-3.5 sm:p-5 text-center">
+            <div id="clock-hours" class="tabular-nums-mono text-3xl sm:text-5xl font-extrabold text-offWhite">00</div>
+            <div class="text-xs sm:text-sm font-bold text-mutedSlate mt-1.5">שעות</div>
+          </div>
+          <div class="bg-[#090a0f] border border-borderDark rounded-2xl p-3.5 sm:p-5 text-center">
+            <div id="clock-minutes" class="tabular-nums-mono text-3xl sm:text-5xl font-extrabold text-ember">00</div>
+            <div class="text-xs sm:text-sm font-bold text-mutedSlate mt-1.5">דקות</div>
+          </div>
+          <div class="bg-[#090a0f] border border-crimson/45 rounded-2xl p-3.5 sm:p-5 text-center shadow-inner shadow-crimson/10">
+            <div id="clock-seconds" class="tabular-nums-mono text-3xl sm:text-5xl font-extrabold text-crimson">00</div>
+            <div class="text-xs sm:text-sm font-bold text-crimson/90 mt-1.5">שניות</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Action Strip -->
+      <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+        <a href="#emissions-dashboard"
+           class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-l from-crimson to-ember hover:opacity-95 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-crimson/25 transition-all">
+          <span>למונה הפליטות המצטבר (CH6 + CH7)</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </a>
+
+        <button type="button" onclick="shareWhatsApp()"
+                class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-[#16a34a]/20 hover:bg-[#16a34a]/30 border border-[#22c55e]/40 text-green-300 font-bold text-sm sm:text-base transition-all">
+          <span>שתפו בוואטסאפ</span>
+        </button>
+
+        <a href="https://air-factories.sviva.gov.il/" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-surface hover:bg-surfaceElevated border border-borderDark text-offWhite font-medium text-sm sm:text-base transition-all">
+          <span>מערכת ניטור הארובות הרשמית</span>
+          <svg class="w-4 h-4 text-mutedSlate" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-16">
+
+    <!-- 3. LIVE CUMULATIVE EMISSIONS DASHBOARD (CH6 & CH7) -->
+    <section id="emissions-dashboard" aria-labelledby="emissions-heading" class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="text-ember text-xs sm:text-sm font-extrabold tracking-wide">
+            ניטור רציף • ארובות בית המשאבות CH6 (203712) ו-CH7 (203713)
+          </span>
+          <h2 id="emissions-heading" class="text-2xl sm:text-4xl font-black text-offWhite mt-1">
+            נתוני הפליטה המצטברים מ-22/11/2026
+          </h2>
+        </div>
+
+        <!-- Instant Unit Switch: Kilograms vs Tons -->
+        <div class="inline-flex items-center p-1.5 rounded-2xl bg-surface border border-borderDark self-start sm:self-auto" role="group" aria-label="בחירת יחידות מידה">
+          <button type="button" id="btn-unit-kg" onclick="setDisplayUnit('kg')"
+                  class="px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition-all bg-ember text-asphalt shadow">
+            קילוגרמים (ק״ג)
+          </button>
+          <button type="button" id="btn-unit-tons" onclick="setDisplayUnit('tons')"
+                  class="px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition-all text-mutedSlate hover:text-offWhite">
+            טונות (טון)
+          </button>
+        </div>
+      </div>
+
+      <!-- Primary NOx & CO Counters -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- NOx Card -->
+        <article class="bg-surface border border-crimson/45 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-crimson/5 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -left-12 -top-12 w-48 h-48 bg-crimson/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div>
+            <div class="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <span class="inline-block px-3 py-1 rounded-lg bg-crimson/15 text-crimson font-mono font-bold text-xs mb-2">
+                  NOx • מחושב כ-NO₂
+                </span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-offWhite">תחמוצות חנקן (NOx)</h3>
+              </div>
+              <div class="text-left">
+                <div class="text-xs text-mutedSlate">קצב פליטה משולב</div>
+                <div id="nox-rate-display" class="tabular-nums-mono text-sm sm:text-base font-bold text-crimson">0.00 kg/h</div>
+              </div>
+            </div>
+
+            <!-- Big Cumulative Readout -->
+            <div class="my-5 p-5 rounded-2xl bg-[#090a0f] border border-borderDark">
+              <div class="flex items-baseline gap-3 flex-wrap">
+                <span id="nox-main-value" class="tabular-nums-mono text-4xl sm:text-5xl lg:text-6xl font-extrabold text-crimson tracking-tight">
+                  0.00
+                </span>
+                <span id="nox-main-unit" class="text-lg sm:text-xl font-extrabold text-slate-300">ק״ג</span>
+              </div>
+              <div class="mt-2.5 text-xs sm:text-sm text-mutedSlate flex flex-wrap items-center justify-between gap-2">
+                <span>שווה ערך: <strong id="nox-alt-value" class="tabular-nums-mono text-offWhite">0.000 טון</strong></span>
+                <span class="text-slate-300">תקרת היתר 2211: <strong class="text-offWhite">55 מ״ג/מק״ת</strong> (יממתי) | <strong class="text-offWhite">50 מ״ג/מק״ת</strong> (שנתי)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stack Share Progress Bar -->
+          <div class="space-y-2 pt-1">
+            <div class="flex justify-between text-xs text-mutedSlate">
+              <span>ארובה CH6 / 203712 (<span id="nox-ch6-share">50%</span>)</span>
+              <span>ארובה CH7 / 203713 (<span id="nox-ch7-share">50%</span>)</span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-[#090a0f] overflow-hidden flex">
+              <div id="nox-ch6-bar" class="bg-crimson h-full transition-all duration-500" style="width: 50%"></div>
+              <div id="nox-ch7-bar" class="bg-ember h-full transition-all duration-500" style="width: 50%"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CO Card -->
+        <article class="bg-surface border border-ember/45 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-ember/5 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -left-12 -top-12 w-48 h-48 bg-ember/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div>
+            <div class="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <span class="inline-block px-3 py-1 rounded-lg bg-ember/15 text-ember font-mono font-bold text-xs mb-2">
+                  CO • פחמן חד-חמצני
+                </span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-offWhite">פחמן חד-חמצני (CO)</h3>
+              </div>
+              <div class="text-left">
+                <div class="text-xs text-mutedSlate">קצב פליטה משולב</div>
+                <div id="co-rate-display" class="tabular-nums-mono text-sm sm:text-base font-bold text-ember">0.00 kg/h</div>
+              </div>
+            </div>
+
+            <!-- Big Cumulative Readout -->
+            <div class="my-5 p-5 rounded-2xl bg-[#090a0f] border border-borderDark">
+              <div class="flex items-baseline gap-3 flex-wrap">
+                <span id="co-main-value" class="tabular-nums-mono text-4xl sm:text-5xl lg:text-6xl font-extrabold text-ember tracking-tight">
+                  0.00
+                </span>
+                <span id="co-main-unit" class="text-lg sm:text-xl font-extrabold text-slate-300">ק״ג</span>
+              </div>
+              <div class="mt-2.5 text-xs sm:text-sm text-mutedSlate flex flex-wrap items-center justify-between gap-2">
+                <span>שווה ערך: <strong id="co-alt-value" class="tabular-nums-mono text-offWhite">0.000 טון</strong></span>
+                <span class="text-slate-300">תקרת היתר 2211: <strong class="text-offWhite">40 מ״ג/מק״ת</strong> (ממוצע שנתי)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stack Share Progress Bar -->
+          <div class="space-y-2 pt-1">
+            <div class="flex justify-between text-xs text-mutedSlate">
+              <span>ארובה CH6 / 203712 (<span id="co-ch6-share">50%</span>)</span>
+              <span>ארובה CH7 / 203713 (<span id="co-ch7-share">50%</span>)</span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-[#090a0f] overflow-hidden flex">
+              <div id="co-ch6-bar" class="bg-ember h-full transition-all duration-500" style="width: 50%"></div>
+              <div id="co-ch7-bar" class="bg-amber-400 h-full transition-all duration-500" style="width: 50%"></div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Transparent Stack Breakdown Cards (CH6 ID 203712 & CH7 ID 203713) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Stack CH6 -->
+        <div class="bg-surface border border-borderDark rounded-3xl p-5 sm:p-6 space-y-4">
+          <div class="flex items-start justify-between gap-3 pb-4 border-b border-borderDark">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-crimson/15 border border-crimson/35 flex flex-col items-center justify-center font-mono">
+                <span class="font-extrabold text-crimson text-sm leading-none">CH6</span>
+                <span class="text-[10px] text-mutedSlate mt-1">203712</span>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-offWhite text-base sm:text-lg">ארובה CH6 (מזהה ארובה 203712)</h4>
+                <p class="text-xs text-mutedSlate mt-0.5">
+                  מנוע <strong class="text-offWhite font-mono">MAN-6</strong> • הספק תרמי נקוב <strong class="text-offWhite font-mono">33.3 MWth</strong>
+                </p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+              ניטור רציף
+            </span>
+          </div>
+
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="px-2.5 py-1 rounded-lg bg-[#090a0f] border border-borderDark text-slate-300">
+              דלק: <strong class="text-offWhite">98% גז מחצבים + 2% סולר</strong>
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-[#090a0f] border border-borderDark text-slate-300">
+              טיפול קצה: <strong class="text-offWhite font-mono">OXY-CAT + SCR + מתקן תפיסת פד״ח</strong>
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-[#090a0f] border border-borderDark text-slate-300">
+              ספיקה: <strong id="ch6-flow-label" class="tabular-nums-mono text-offWhite">102,100</strong> <span class="font-mono">Nm³/h</span>
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="p-3.5 rounded-2xl bg-[#090a0f] border border-borderDark">
+              <div class="text-xs text-mutedSlate mb-1">ריכוז NOx (תקרה: 55/50)</div>
+              <div class="tabular-nums-mono font-bold text-offWhite text-base">
+                <span id="ch6-nox-conc">50.0</span> <span class="text-xs text-mutedSlate">mg/Nm³</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-borderDark/70 text-xs text-crimson font-bold">
+                מצטבר: <span id="ch6-nox-cum" class="tabular-nums-mono">0.00</span> <span class="unit-text">ק״ג</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-[#090a0f] border border-borderDark">
+              <div class="text-xs text-mutedSlate mb-1">ריכוז CO (תקרה: 40)</div>
+              <div class="tabular-nums-mono font-bold text-offWhite text-base">
+                <span id="ch6-co-conc">40.0</span> <span class="text-xs text-mutedSlate">mg/Nm³</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-borderDark/70 text-xs text-ember font-bold">
+                מצטבר: <span id="ch6-co-cum" class="tabular-nums-mono">0.00</span> <span class="unit-text">ק״ג</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stack CH7 -->
+        <div class="bg-surface border border-borderDark rounded-3xl p-5 sm:p-6 space-y-4">
+          <div class="flex items-start justify-between gap-3 pb-4 border-b border-borderDark">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-ember/15 border border-ember/35 flex flex-col items-center justify-center font-mono">
+                <span class="font-extrabold text-ember text-sm leading-none">CH7</span>
+                <span class="text-[10px] text-mutedSlate mt-1">203713</span>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-offWhite text-base sm:text-lg">ארובה CH7 (מזהה ארובה 203713)</h4>
+                <p class="text-xs text-mutedSlate mt-0.5">
+                  מנוע <strong class="text-offWhite font-mono">MAN-7</strong> • הספק תרמי נקוב <strong class="text-offWhite font-mono">33.3 MWth</strong>
+                </p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+              ניטור רציף
+            </span>
+          </div>
+
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="px-2.5 py-1 rounded-lg bg-[#090a0f] border border-borderDark text-slate-300">
+              דלק: <strong class="text-offWhite">98% גז מחצבים + 2% סולר</strong>
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-[#090a0f] border border-borderDark text-slate-300">
+              טיפול קצה: <strong class="text-offWhite font-mono">OXY-CAT + SCR</strong>
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-[#090a0f] border border-borderDark text-slate-300">
+              ספיקה: <strong id="ch7-flow-label" class="tabular-nums-mono text-offWhite">102,100</strong> <span class="font-mono">Nm³/h</span>
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="p-3.5 rounded-2xl bg-[#090a0f] border border-borderDark">
+              <div class="text-xs text-mutedSlate mb-1">ריכוז NOx (תקרה: 55/50)</div>
+              <div class="tabular-nums-mono font-bold text-offWhite text-base">
+                <span id="ch7-nox-conc">50.0</span> <span class="text-xs text-mutedSlate">mg/Nm³</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-borderDark/70 text-xs text-crimson font-bold">
+                מצטבר: <span id="ch7-nox-cum" class="tabular-nums-mono">0.00</span> <span class="unit-text">ק״ג</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-[#090a0f] border border-borderDark">
+              <div class="text-xs text-mutedSlate mb-1">ריכוז CO (תקרה: 40)</div>
+              <div class="tabular-nums-mono font-bold text-offWhite text-base">
+                <span id="ch7-co-conc">40.0</span> <span class="text-xs text-mutedSlate">mg/Nm³</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-borderDark/70 text-xs text-ember font-bold">
+                מצטבר: <span id="ch7-co-cum" class="tabular-nums-mono">0.00</span> <span class="unit-text">ק״ג</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expandable Accordion: Transparency & Engineering Calculation Methodology -->
+      <div class="bg-surface border border-borderDark rounded-2xl overflow-hidden">
+        <button type="button" id="methodology-toggle" onclick="toggleMethodology()"
+                aria-expanded="false"
+                class="w-full px-6 py-4 flex items-center justify-between text-right hover:bg-surfaceElevated transition-colors">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-ember/15 border border-ember/30 text-ember flex items-center justify-center font-mono font-extrabold text-sm">
+              fx
+            </span>
+            <div>
+              <span class="font-extrabold text-offWhite text-sm sm:text-base block">
+                שקיפות ומתודולוגיית חישוב (מ-mg/Nm³ לטונות)
+              </span>
+              <span class="text-xs text-mutedSlate">
+                נוסחת ההמרה הפיזיקלית, גזירת הספיקה מהיתר 2211 (33.3 MWth בנרמול ל-15% חמצן) וכיול אינטראקטיבי
+              </span>
+            </div>
+          </div>
+          <svg id="methodology-arrow" class="w-5 h-5 text-mutedSlate transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div id="methodology-content" class="hidden px-6 pb-6 pt-3 border-t border-borderDark space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div class="space-y-3 text-sm text-slate-300 font-assistant leading-relaxed">
+              <p>
+                מערכת הניטור הרציף (<span class="font-mono text-offWhite">CEMS</span>) באתר המשרד להגנת הסביבה מדווחת ריכוזים ביחידות <span class="font-mono text-ember font-bold">mg/Nm³</span> (מ״ג למ״ק תקני, גז יבש, 273.15K, 101.3kPa, מנורמל ל-<strong class="text-offWhite">15% חמצן נפחי</strong> לפי טבלאות א׳1 וא׳2 להיתר 2211). ההמרה למסה מצטברת מתבצעת לפי הנוסחה הפיזיקלית:
+              </p>
+
+              <div class="p-4 rounded-xl bg-[#090a0f] border border-borderDark font-mono text-xs sm:text-sm text-ember overflow-x-auto" dir="ltr">
+                Mass (kg) = (Concentration [mg/Nm³] × Flow Rate [Nm³/h] × Hours) / 1,000,000
+                <br />
+                Mass (tons) = Mass (kg) / 1,000
+              </div>
+
+              <p>
+                <strong class="text-offWhite">קביעת הספיקה התקנית:</strong> סעיף 18(א)(2) להיתר מחייב שידור רציף של ספיקת גזי הפליטה. בהיעדר ערוץ ספיקה גולמי בנתוני הרשת, הסקריפט והסימולטור משתמשים בספיקה הנומינלית הנגזרת ישירות מההספק התרמי הנקוב בהיתר לכל מנוע (<strong class="text-offWhite font-mono">33.3 MWth</strong> בשריפת גז מחצבים בנרמול ל-<strong class="text-offWhite font-mono">15% O₂</strong> יבש = <strong class="text-ember font-mono">102,100 Nm³/h</strong> לכל ארובה, ובסה״כ <strong class="text-ember font-mono">204,200 Nm³/h</strong> לשתי הארובות).
+              </p>
+            </div>
+
+            <!-- Interactive Flow Rate & Concentration Calibration -->
+            <div class="bg-[#090a0f] border border-borderDark rounded-2xl p-5 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-ember">כיול ספיקה וריכוזים (בדיקת רגישות)</span>
+                <button type="button" onclick="resetCalibration()" class="text-xs text-mutedSlate hover:text-offWhite underline">
+                  איפוס לערכי היתר 2211
+                </button>
+              </div>
+
+              <div class="space-y-3 text-xs">
+                <div>
+                  <label for="slider-flow-per-stack" class="flex justify-between text-mutedSlate mb-1">
+                    <span>ספיקה תקנית לכל ארובה (CH6 / CH7)</span>
+                    <span id="label-flow-per-stack" class="font-mono text-offWhite font-bold">102,100 Nm³/h</span>
+                  </label>
+                  <input id="slider-flow-per-stack" type="range" min="50000" max="160000" step="100" value="102100" class="w-full" oninput="applyManualCalibration()" />
+                  <div class="flex justify-between text-[11px] text-slate-500 mt-0.5">
+                    <span>עומס חלקי (50,000)</span>
+                    <span>נומינלי 33.3 MWth (102,100)</span>
+                    <span>עומס שיא (160,000)</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-1">
+                  <div>
+                    <label for="slider-nox-conc" class="flex justify-between text-mutedSlate mb-1">
+                      <span>ריכוז NOx (תקרה 55/50)</span>
+                      <span id="label-nox-conc" class="font-mono text-crimson font-bold">50.0 mg/Nm³</span>
+                    </label>
+                    <input id="slider-nox-conc" type="range" min="10" max="110" step="0.5" value="50.0" class="w-full" oninput="applyManualCalibration()" />
+                  </div>
+
+                  <div>
+                    <label for="slider-co-conc" class="flex justify-between text-mutedSlate mb-1">
+                      <span>ריכוז CO (תקרה 40)</span>
+                      <span id="label-co-conc" class="font-mono text-ember font-bold">40.0 mg/Nm³</span>
+                    </label>
+                    <input id="slider-co-conc" type="range" min="5" max="100" step="0.5" value="40.0" class="w-full" oninput="applyManualCalibration()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ADMINISTRATIVE PETITION & PERMIT 2211 FAILURES (4 STRUCTURED CARDS) -->
+    <section aria-labelledby="petition-heading" class="space-y-6">
+      <div class="max-w-3xl">
+        <span class="text-crimson text-xs sm:text-sm font-extrabold tracking-wide">
+          העתירה המנהלית (שומרי הבית ומגמה ירוקה) נגד היתר פליטה 2211
+        </span>
+        <h2 id="petition-heading" class="text-2xl sm:text-4xl font-black text-offWhite mt-1">
+          ארבעת הכשלים המרכזיים בהיתר הפליטה שאושר
+        </h2>
+        <p class="text-mutedSlate text-sm sm:text-base font-assistant mt-2">
+          היתר פליטה מס׳ 2211 ניתן ביום 18.08.2024 לחברת שפיר – ג׳י.אי.אס זכיין תחנת כח בע״מ עבור תחנת כוח בשטח מתקן ההתפלה באשדוד, תוך שורה של הפרות מהותיות של חוק אוויר נקי, התשס״ח-2008:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card 1: BAT Violation -->
+        <article class="bg-surface border border-borderDark hover:border-crimson/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-crimson/15 border border-crimson/35 text-crimson font-mono font-extrabold text-sm">
+                01
+              </span>
+              <span class="px-3 py-1 rounded-full bg-crimson/10 text-crimson text-xs font-bold">
+                סעיפים 18(ה), 22(ד) ותקנה 14
+              </span>
+            </div>
+            <h3 class="text-xl font-black text-offWhite">
+              הפרת חובת ה-BAT (הטכניקה המיטבית הזמינה)
+            </h3>
+            <p class="text-sm sm:text-base text-slate-300 font-assistant leading-relaxed">
+              בהיתר אושרו <strong class="text-offWhite">7 מנועי בעירה פנימית</strong> (5 מנועי גז לייצור חשמל <span class="font-mono text-offWhite">CH1–CH5</span> + שני מנועי גז-סולר לבית המשאבות <span class="font-mono text-offWhite">CH6–CH7</span>) חלף טכנולוגיית טורבינות גז או מחזור משולב המקובלת בישראל ובעולם. זאת בניגוד לחובת סעיפים 18(ה) ו-22(ד) לחוק אוויר נקי ותקנה 14 לתקנות היתרי פליטה, המחייבים בחירה בטכנולוגיית הייצור המפחיתה במידה המרבית את זיהום האוויר.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-borderDark text-xs text-mutedSlate">
+            טכנולוגיית מנועי בעירה פנימית מגבירה דרמטית פליטות פורמאלדהיד ומתאן לעומת טורבינות גז.
+          </div>
+        </article>
+
+        <!-- Card 2: Formaldehyde Danger -->
+        <article class="bg-surface border border-borderDark hover:border-crimson/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-crimson/15 border border-crimson/35 text-crimson font-mono font-extrabold text-sm">
+                02
+              </span>
+              <span class="px-3 py-1 rounded-full bg-crimson/15 text-crimson text-xs font-bold">
+                מסרטן ודאי בכל ריכוז
+              </span>
+            </div>
+            <h3 class="text-xl font-black text-offWhite">
+              סכנת הפורמאלדהיד (CH₂O) — מסרטן ודאי ללא ניטור רציף
+            </h3>
+            <p class="text-sm sm:text-base text-slate-300 font-assistant leading-relaxed">
+              מנועי בעירה פנימית פולטים ריכוזים גבוהים של <strong class="text-crimson">פורמאלדהיד</strong> — חומר המוגדר כמסרטן ודאי לבני אדם בכל ריכוז שהוא. באזה״ת הצפוני באשדוד כבר נמדדת חריגה מערך היעד (<strong class="text-offWhite font-mono">0.8 מק״ג/מ״ק</strong>), והתחנה צפויה להוסיף עד <strong class="text-ember font-mono">1.35 מק״ג/מ״ק</strong> בערך שעתי. בהיתר 2211 אושרה תקרה של <strong class="text-offWhite font-mono">5 מ״ג/מק״ת</strong> <strong class="text-crimson">ללא ניטור רציף כלל</strong> (דיגום אחת לחודש או חצי שנה בלבד!).
+            </p>
+          </div>
+          <div class="pt-3 border-t border-borderDark text-xs text-mutedSlate">
+            גם תושבי צפון אשדוד וניר גלים חשופים לתוספת של 0.78–0.95 מק״ג/מ״ק מעל ערך היעד.
+          </div>
+        </article>
+
+        <!-- Card 3: Bypassing Section 23 -->
+        <article class="bg-surface border border-borderDark hover:border-ember/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-ember/15 border border-ember/35 text-ember font-mono font-extrabold text-sm">
+                03
+              </span>
+              <span class="px-3 py-1 rounded-full bg-ember/15 text-ember text-xs font-bold">
+                סעיף 23 לחוק אוויר נקי
+              </span>
+            </div>
+            <h3 class="text-xl font-black text-offWhite">
+              עקיפת סעיף 23 לחוק אוויר נקי
+            </h3>
+            <p class="text-sm sm:text-base text-slate-300 font-assistant leading-relaxed">
+              תוכנית <span class="font-mono text-offWhite">603-0184804</span> אושרה ב-2017 ללא הליך תכנון ובנייה משותף עם הממונה — בנימוק של המשרד להגנת הסביבה כי ההליך <em>״אינו כדאי ואינו יעיל״</em>. בכך הפך המשרד הוראת חוק מפורשת לאות מתה, הוכתבה מראש טכנולוגיה מזהמת ונכבל שיקול דעתו המקצועי בעת מתן ההיתר.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-borderDark text-xs text-mutedSlate">
+            תסקיר ההשפעה על הסביבה מ-2017 כלל לא בחן את פליטות הפורמאלדהיד של מנועי הגז.
+          </div>
+        </article>
+
+        <!-- Card 4: National Grid Power Plant -->
+        <article class="bg-surface border border-borderDark hover:border-ember/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-ember/15 border border-ember/35 text-ember font-mono font-extrabold text-sm">
+                04
+              </span>
+              <span class="px-3 py-1 rounded-full bg-ember/15 text-ember text-xs font-bold">
+                הסכם פריז ויעדי אקלים
+              </span>
+            </div>
+            <h3 class="text-xl font-black text-offWhite">
+              תחנת כוח לרשת הארצית במקום התפלה בלבד
+            </h3>
+            <p class="text-sm sm:text-base text-slate-300 font-assistant leading-relaxed">
+              בניגוד לייעוד התוכנית לצריכה עצמית של מתקן ההתפלה, אושרו <strong class="text-offWhite">5 מנועי חשמל</strong> (<strong class="text-ember">4 מהם למכירה לרשת הארצית</strong> ורק 1 למתקן ההתפלה) לצד <strong class="text-offWhite">2 מנועי המשאבות</strong> — בהספק כולל של 200 מגה-וואט תרמי (100 מגה-וואט חשמלי), מה שמעמיק פליטות גזי חממה ומתאן ומסכל את יעדי הסכם פריז.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-borderDark text-xs text-mutedSlate">
+            היתר 2211 אף מאפשר ליזם לבקש הסרת מגבלת 2,000 שעות ההפעלה השנתיות בתוך 3 שנים.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 5. ENVIRONMENTAL & PUBLIC HEALTH IMPACT + LIVE EQUIVALENTS -->
+    <section aria-labelledby="health-impact-heading" class="space-y-8">
+      <div class="max-w-3xl">
+        <span class="text-ember text-xs sm:text-sm font-extrabold tracking-wide">
+          בריאות הציבור ואיכות הסביבה • מבוסס על היתר 2211, דוחות המפל״ס, WHO ו-EPA
+        </span>
+        <h2 id="health-impact-heading" class="text-2xl sm:text-4xl font-black text-offWhite mt-1">
+          ההשפעה הישירה על האוויר שתושבי אשדוד והסביבה נושמים
+        </h2>
+        <p class="text-mutedSlate text-sm sm:text-base font-assistant mt-2">
+          אזור התעשייה הצפוני באשדוד מוגדר בדוחות המפל״ס של המשרד להגנת הסביבה כאחד ממוקדי זיהום האוויר הצפופים בישראל. תוספת הפליטות ממתקן ההתפלה נישאת אל שכונות אשדוד, ניר גלים, יבנה וגן יבנה:
+        </p>
+      </div>
+
+      <!-- 3 Pollutant Impact Cards (NOx, CO, Formaldehyde) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- NOx Health Card -->
+        <div class="bg-surface border border-borderDark rounded-3xl p-6 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-lg bg-crimson/15 text-crimson font-mono font-bold text-xs">NOx / NO₂</span>
+            <span class="text-xs text-mutedSlate">ניטור רציף</span>
+          </div>
+          <h3 class="text-xl font-extrabold text-offWhite">תחמוצות חנקן</h3>
+          <p class="text-sm text-slate-300 font-assistant leading-relaxed">
+            גורמות לדלקות בדרכי הנשימה, מחמירות התקפי אסתמה וברונכיטיס ופוגעות בהתפתחות ריאות אצל ילדים. באטמוספירה יוצרות <strong class="text-offWhite">אוזון קרקעי (ערפיח) וחלקיקים נשימים עדינים (PM₂.₅)</strong> החודרים למחזור הדם.
+          </p>
+        </div>
+
+        <!-- CO Health Card -->
+        <div class="bg-surface border border-borderDark rounded-3xl p-6 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-lg bg-ember/15 text-ember font-mono font-bold text-xs">CO</span>
+            <span class="text-xs text-mutedSlate">ניטור רציף</span>
+          </div>
+          <h3 class="text-xl font-extrabold text-offWhite">פחמן חד-חמצני</h3>
+          <p class="text-sm text-slate-300 font-assistant leading-relaxed">
+            גז רעיל חסר צבע וריח הנקשר להמוגלובין בדם פי ~200 מחמצן, ובכך <strong class="text-offWhite">מפחית את אספקת החמצן ללב, למוח ולרקמות</strong>. חשיפה מתמשכת מגבירה סיכון לאירועים קרדיו-וסקולריים בקרב חולי לב, קשישים ונשים הרות.
+          </p>
+        </div>
+
+        <!-- Formaldehyde Health Card -->
+        <div class="bg-surface border border-crimson/40 rounded-3xl p-6 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-lg bg-crimson/20 text-crimson font-mono font-bold text-xs">CH₂O</span>
+            <span class="text-xs text-crimson font-bold">ללא ניטור רציף!</span>
+          </div>
+          <h3 class="text-xl font-extrabold text-offWhite">פורמאלדהיד (מסרטן ודאי)</h3>
+          <p class="text-sm text-slate-300 font-assistant leading-relaxed">
+            מסווג כ<strong class="text-crimson">מסרטן ודאי לבני אדם (קבוצה 1)</strong> הקשור לסרטן דרכי הנשימה העליונות ולוקמיה, ללא סף חשיפה בטוח. בנוסף גורם לצריבה בעיניים ובגרון ומוגבר במנועי גז עם 2% סולר.
+          </p>
+        </div>
+      </div>
+
+      <!-- Dynamic Live Real-Time Equivalent Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Equivalent 1: Polluted Air Volume above Target Value -->
+        <div class="bg-gradient-to-l from-surface to-[#161a26] border border-crimson/40 rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+          <div class="space-y-2">
+            <span class="inline-block px-3 py-1 rounded-full bg-crimson/15 text-crimson text-xs font-extrabold">
+              המחשה דינמית בזמן אמת • נפח אוויר מזוהם
+            </span>
+            <h3 class="text-xl font-black text-offWhite">
+              היקף האוויר המזוהם מעל ערך היעד של NO₂
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 font-assistant">
+              כמות האוויר הנקי שנדרשת כדי למהול את פליטת ה-<span class="font-mono text-offWhite">NOx</span> המצטברת אל מתחת לערך היעד המחמיר (10 מק״ג/מ״ק):
+            </p>
+          </div>
+          <div class="mt-5 p-4 rounded-2xl bg-[#090a0f] border border-borderDark">
+            <div id="equiv-air-volume" class="tabular-nums-mono text-2xl sm:text-4xl font-extrabold text-crimson">
+              0
+            </div>
+            <div class="text-xs sm:text-sm font-bold text-offWhite mt-1">
+              מיליון מטר מעוקב (מ״ק) של אוויר
+            </div>
+          </div>
+        </div>
+
+        <!-- Equivalent 2: Passenger Car Kilometers -->
+        <div class="bg-gradient-to-l from-surface to-[#161a26] border border-ember/40 rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+          <div class="space-y-2">
+            <span class="inline-block px-3 py-1 rounded-full bg-ember/15 text-ember text-xs font-extrabold">
+              המחשה דינמית בזמן אמת • תחבורה
+            </span>
+            <h3 class="text-xl font-black text-offWhite">
+              השוואה לנסיעות רכב פרטי ממוצע
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 font-assistant">
+              פליטת ה-<span class="font-mono text-offWhite">NOx</span> שנצברה מארובות <span class="font-mono">CH6</span> ו-<span class="font-mono">CH7</span> בלבד מאז דחיית הדיון שקולה לנסיעה של:
+            </p>
+          </div>
+          <div class="mt-5 p-4 rounded-2xl bg-[#090a0f] border border-borderDark">
+            <div id="equiv-car-km" class="tabular-nums-mono text-2xl sm:text-4xl font-extrabold text-ember">
+              0
+            </div>
+            <div class="text-xs sm:text-sm font-bold text-offWhite mt-1">
+              קילומטרים של רכב פרטי (לפי ~0.25 גרם NOx לק״מ)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CALL TO ACTION, SOCIAL SHARING & OFFICIAL SOURCE TRANSPARENCY -->
+    <section aria-labelledby="share-cta-heading" class="bg-surface border border-borderDark rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xl shadow-black/70">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-4">
+          <span class="inline-block px-3 py-1 rounded-full bg-ember/15 text-ember text-xs font-extrabold">
+            המאבק הציבורי והמשפטי • שתפו עכשיו
+          </span>
+          <h2 id="share-cta-heading" class="text-2xl sm:text-4xl font-black text-offWhite leading-tight">
+            אל תתנו לזיהום להפוך לשגרה. הפיצו את הנתונים בזמן אמת.
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base font-assistant leading-relaxed">
+            כל לחיצה על כפתורי השיתוף מייצרת הודעה עדכנית הכוללת את מספר הימים המדויק שחלף מאז <strong class="text-offWhite">22/11/2026</strong> ואת כמות הטונות של <span class="font-mono text-offWhite">NOx</span> ו-<span class="font-mono text-offWhite">CO</span> שנפלטו עד לרגע זה.
+          </p>
+
+          <!-- Social Share Buttons -->
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button type="button" onclick="shareWhatsApp()"
+                    class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-[#16a34a] hover:bg-[#15803d] text-white font-extrabold text-sm transition-all shadow-lg shadow-green-950/50">
+              <span>WhatsApp</span>
+            </button>
+
+            <button type="button" onclick="shareTelegram()"
+                    class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-[#0284c7] hover:bg-[#0369a1] text-white font-extrabold text-sm transition-all">
+              <span>Telegram</span>
+            </button>
+
+            <button type="button" onclick="shareFacebook()"
+                    class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-extrabold text-sm transition-all">
+              <span>Facebook</span>
+            </button>
+
+            <button type="button" onclick="shareX()"
+                    class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-[#1e293b] hover:bg-[#334155] border border-slate-700 text-white font-extrabold text-sm transition-all">
+              <span>X (Twitter)</span>
+            </button>
+
+            <button type="button" onclick="copyShareMessage()"
+                    class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-ember/15 hover:bg-ember/25 border border-ember/45 text-ember font-extrabold text-sm transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
+              <span>העתק קישור + נתונים חיים</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Official Permit & Monitoring Source Box -->
+        <div class="lg:col-span-5 bg-[#090a0f] border border-borderDark rounded-2xl p-5 sm:p-6 space-y-3 text-xs sm:text-sm">
+          <div class="flex items-center justify-between border-b border-borderDark pb-3">
+            <span class="font-extrabold text-offWhite">תיעוד ושקיפות מקורות</span>
+            <span id="json-sync-badge" class="px-2.5 py-0.5 rounded-full bg-ember/15 text-ember font-mono text-[11px]">
+              ערכי היתר 2211 פעילים
+            </span>
+          </div>
+          <div class="space-y-2 text-mutedSlate">
+            <div class="flex justify-between gap-2">
+              <span>היתר פליטה:</span>
+              <span class="font-mono text-offWhite font-bold">מס׳ 2211 (אתר סביבתי 360767)</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <span>בעלת ההיתר:</span>
+              <span class="text-offWhite">שפיר – ג׳י.אי.אס זכיין תחנת כח בע״מ</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <span>העותרות:</span>
+              <span class="text-offWhite">עמותת שומרי הבית ועמותת מגמה ירוקה</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <span>ארובות מנוטרות:</span>
+              <span class="font-mono text-offWhite">CH6 (203712), CH7 (203713)</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <span>מאגר ממשלתי:</span>
+              <a href="https://air-factories.sviva.gov.il/" target="_blank" rel="noopener noreferrer" class="text-ember underline hover:text-orange-400 font-mono">
+                air-factories.sviva.gov.il
+              </a>
+            </div>
+            <div class="flex justify-between gap-2">
+              <span>סנכרון נתונים אחרון:</span>
+              <span id="last-sync-label" class="font-mono text-offWhite">ממתין לסנכרון שעתי</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-borderDark py-8 px-4 text-center text-xs text-mutedSlate space-y-2">
+    <p class="text-slate-300 font-medium">
+      מעקב אזרחי-משפטי אחר פליטות תחנת הכוח במתקן ההתפלה באשדוד • היתר פליטה מס׳ 2211 (אתר 360767)
+    </p>
+    <p>
+      העותרות: עמותת שומרי הבית (ע.ר. 580667533) ועמותת מגמה ירוקה (ע.ר. 580383909) • מקור הניטור: מערכת ניטור הארובות הרציף של המשרד להגנת הסביבה.
+    </p>
+  </footer>
+
+  <!-- CORE APPLICATION LOGIC -->
+  <script>
+    /**
+     * Original Hearing Timestamp: Sunday, November 22, 2026 at 09:00:00 IST (UTC+2)
+     */
+    const HEARING_DATE_ISO = '2026-11-22T09:00:00+02:00';
+    const HEARING_TIMESTAMP_MS = new Date(HEARING_DATE_ISO).getTime();
+
+    /**
+     * Exact Permit 2211 Engineering Defaults for Pump House Stacks CH6 (203712) & CH7 (203713):
+     * - Nominal Thermal Input: 33.3 MWth per engine (MAN-6 & MAN-7)
+     * - Normalized dry flue gas flow at 15% O2: 102,100 Nm^3/h per stack (204,200 Nm^3/h combined)
+     * - Permit 2211 Ceilings: NOx = 55 mg/Nm^3 daily / 50 mg/Nm^3 annual avg; CO = 40 mg/Nm^3 annual avg
+     */
+    const PERMIT_DEFAULTS = {
+      ch6: {
+        stackId: '203712',
+        noxMgNm3: 50.0,
+        coMgNm3: 40.0,
+        flowNm3PerHour: 102100
+      },
+      ch7: {
+        stackId: '203713',
+        noxMgNm3: 50.0,
+        coMgNm3: 40.0,
+        flowNm3PerHour: 102100
+      }
+    };
+
+    const appState = {
+      unit: 'kg',               // 'kg' | 'tons'
+      simDaysOffset: null,      // null = real-time; number = simulated days after hearing
+      simAnchorWallClock: Date.now(),
+      liveDataLoaded: false,
+      livePayload: null,
+      config: JSON.parse(JSON.stringify(PERMIT_DEFAULTS)),
+      latestSnapshot: {
+        elapsedDays: 0,
+        totalNoxKg: 0,
+        totalCoKg: 0,
+        isPreHearing: false
+      }
+    };
+
+    /**
+     * Load hourly updated data from ./data/emissions.json if present
+     */
+    async function fetchLiveEmissionsJson() {
+      try {
+        const res = await fetch('./data/emissions.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+
+        if (data && data.stations && data.stations.CH6 && data.stations.CH7) {
+          appState.liveDataLoaded = true;
+          appState.livePayload = data;
+
+          if (data.flowRatesNm3h) {
+            if (typeof data.flowRatesNm3h.CH6 === 'number') appState.config.ch6.flowNm3PerHour = data.flowRatesNm3h.CH6;
+            if (typeof data.flowRatesNm3h.CH7 === 'number') appState.config.ch7.flowNm3PerHour = data.flowRatesNm3h.CH7;
+          }
+
+          if (typeof data.stations.CH6.avg_NOx_mg_nm3 === 'number' && data.stations.CH6.avg_NOx_mg_nm3 > 0) {
+            appState.config.ch6.noxMgNm3 = data.stations.CH6.avg_NOx_mg_nm3;
+          }
+          if (typeof data.stations.CH6.avg_CO_mg_nm3 === 'number' && data.stations.CH6.avg_CO_mg_nm3 > 0) {
+            appState.config.ch6.coMgNm3 = data.stations.CH6.avg_CO_mg_nm3;
+          }
+          if (typeof data.stations.CH7.avg_NOx_mg_nm3 === 'number' && data.stations.CH7.avg_NOx_mg_nm3 > 0) {
+            appState.config.ch7.noxMgNm3 = data.stations.CH7.avg_NOx_mg_nm3;
+          }
+          if (typeof data.stations.CH7.avg_CO_mg_nm3 === 'number' && data.stations.CH7.avg_CO_mg_nm3 > 0) {
+            appState.config.ch7.coMgNm3 = data.stations.CH7.avg_CO_mg_nm3;
+          }
+
+          const badge = document.getElementById('json-sync-badge');
+          if (badge && data.sourceStatus === 'live') {
+            badge.textContent = 'מחובר לניטור רציף חי';
+            badge.className = 'px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-mono text-[11px]';
+          }
+
+          if (data.lastUpdated) {
+            const syncLabel = document.getElementById('last-sync-label');
+            if (syncLabel) {
+              const dt = new Date(data.lastUpdated);
+              syncLabel.textContent = dt.toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' });
+            }
+          }
+
+          syncSlidersWithState();
+        }
+      } catch (err) {
+        // Fallback smoothly to Permit 2211 engineering model
+      }
+    }
+
+    /**
+     * Physical conversion: Mass (kg) = (Concentration [mg/Nm^3] * Flow [Nm^3/h] * 1h) / 1,000,000
+     */
+    function hourlyKg(mgNm3, flowNm3h) {
+      return (mgNm3 * flowNm3h) / 1_000_000;
+    }
+
+    function fmtNum(val, decimals = 2) {
+      return val.toLocaleString('en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+    }
+
+    /**
+     * Main 1-second render loop
+     */
+    function renderTick() {
+      const wallNow = Date.now();
+      let effectiveNow = wallNow;
+
+      if (appState.simDaysOffset !== null) {
+        const extraSec = (wallNow - appState.simAnchorWallClock) / 1000;
+        const offsetMs = (appState.simDaysOffset * 86400 + 5 * 3600 + 24 * 60 + extraSec) * 1000;
+        effectiveNow = HEARING_TIMESTAMP_MS + offsetMs;
+      }
+
+      const deltaMs = effectiveNow - HEARING_TIMESTAMP_MS;
+      const isPreHearing = deltaMs < 0;
+      const absSec = Math.floor(Math.abs(deltaMs) / 1000);
+
+      const days = Math.floor(absSec / 86400);
+      const hours = Math.floor((absSec % 86400) / 3600);
+      const minutes = Math.floor((absSec % 3600) / 60);
+      const seconds = absSec % 60;
+
+      document.getElementById('clock-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('clock-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('clock-minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('clock-seconds').textContent = String(seconds).padStart(2, '0');
+
+      const titleEl = document.getElementById('clock-status-title');
+      const pillEl = document.getElementById('clock-subtitle-pill');
+
+      if (isPreHearing) {
+        titleEl.textContent = 'ספירה לאחור למועד הדיון המקורי: יום ראשון, 22/11/2026 בשעה 09:00';
+        pillEl.textContent = 'השתמשו בסרגל העליון להדמיית +3, +14 או +45 ימים לאחר הדחייה';
+      } else if (appState.simDaysOffset !== null) {
+        titleEl.textContent = `הדמיית מצב (+${appState.simDaysOffset} ימים): הזמן שחלף מאז 22/11/2026 בשעה 09:00`;
+        pillEl.textContent = 'הדמיית צבירת פליטות לפי ערכי היתר 2211';
+      } else {
+        titleEl.textContent = 'הזמן שחלף מאז מועד הדיון המקורי: יום ראשון, 22/11/2026 בשעה 09:00';
+        pillEl.textContent = 'כל שנייה של דחייה מוסיפה מזהמים לאוויר';
+      }
+
+      const elapsedHours = isPreHearing ? 0 : Math.abs(deltaMs) / 3_600_000;
+
+      const ch6NoxRate = hourlyKg(appState.config.ch6.noxMgNm3, appState.config.ch6.flowNm3PerHour);
+      const ch7NoxRate = hourlyKg(appState.config.ch7.noxMgNm3, appState.config.ch7.flowNm3PerHour);
+      const totalNoxRate = ch6NoxRate + ch7NoxRate;
+
+      const ch6CoRate = hourlyKg(appState.config.ch6.coMgNm3, appState.config.ch6.flowNm3PerHour);
+      const ch7CoRate = hourlyKg(appState.config.ch7.coMgNm3, appState.config.ch7.flowNm3PerHour);
+      const totalCoRate = ch6CoRate + ch7CoRate;
+
+      let ch6NoxKg = ch6NoxRate * elapsedHours;
+      let ch7NoxKg = ch7NoxRate * elapsedHours;
+      let ch6CoKg = ch6CoRate * elapsedHours;
+      let ch7CoKg = ch7CoRate * elapsedHours;
+
+      // If live scraped JSON is loaded in real-time mode and has samples > 0, anchor to scraped cumulative totals
+      if (
+        appState.liveDataLoaded &&
+        appState.simDaysOffset === null &&
+        !isPreHearing &&
+        appState.livePayload &&
+        appState.livePayload.sourceStatus === 'live'
+      ) {
+        const lastSyncMs = new Date(appState.livePayload.lastUpdated).getTime();
+        const extraHoursSinceSync = Math.max(0, (effectiveNow - lastSyncMs) / 3_600_000);
+        ch6NoxKg = (appState.livePayload.stations.CH6.NOx_kg || 0) + ch6NoxRate * extraHoursSinceSync;
+        ch7NoxKg = (appState.livePayload.stations.CH7.NOx_kg || 0) + ch7NoxRate * extraHoursSinceSync;
+        ch6CoKg = (appState.livePayload.stations.CH6.CO_kg || 0) + ch6CoRate * extraHoursSinceSync;
+        ch7CoKg = (appState.livePayload.stations.CH7.CO_kg || 0) + ch7CoRate * extraHoursSinceSync;
+      }
+
+      const totalNoxKg = ch6NoxKg + ch7NoxKg;
+      const totalCoKg = ch6CoKg + ch7CoKg;
+
+      appState.latestSnapshot = {
+        elapsedDays: isPreHearing ? 0 : days,
+        totalNoxKg,
+        totalCoKg,
+        isPreHearing
+      };
+
+      // Update hourly rates
+      document.getElementById('nox-rate-display').textContent = `${fmtNum(totalNoxRate, 2)} kg/h`;
+      document.getElementById('co-rate-display').textContent = `${fmtNum(totalCoRate, 2)} kg/h`;
+
+      // Update main and per-stack values in kg or tons
+      if (appState.unit === 'kg') {
+        document.getElementById('nox-main-value').textContent = fmtNum(totalNoxKg, 2);
+        document.getElementById('nox-main-unit').textContent = 'ק״ג';
+        document.getElementById('nox-alt-value').textContent = `${fmtNum(totalNoxKg / 1000, 3)} טון`;
+
+        document.getElementById('co-main-value').textContent = fmtNum(totalCoKg, 2);
+        document.getElementById('co-main-unit').textContent = 'ק״ג';
+        document.getElementById('co-alt-value').textContent = `${fmtNum(totalCoKg / 1000, 3)} טון`;
+
+        document.getElementById('ch6-nox-cum').textContent = fmtNum(ch6NoxKg, 1);
+        document.getElementById('ch6-co-cum').textContent = fmtNum(ch6CoKg, 1);
+        document.getElementById('ch7-nox-cum').textContent = fmtNum(ch7NoxKg, 1);
+        document.getElementById('ch7-co-cum').textContent = fmtNum(ch7CoKg, 1);
+        document.querySelectorAll('.unit-text').forEach(el => (el.textContent = 'ק״ג'));
+      } else {
+        document.getElementById('nox-main-value').textContent = fmtNum(totalNoxKg / 1000, 3);
+        document.getElementById('nox-main-unit').textContent = 'טון';
+        document.getElementById('nox-alt-value').textContent = `${fmtNum(totalNoxKg, 1)} ק״ג`;
+
+        document.getElementById('co-main-value').textContent = fmtNum(totalCoKg / 1000, 3);
+        document.getElementById('co-main-unit').textContent = 'טון';
+        document.getElementById('co-alt-value').textContent = `${fmtNum(totalCoKg, 1)} ק״ג`;
+
+        document.getElementById('ch6-nox-cum').textContent = fmtNum(ch6NoxKg / 1000, 3);
+        document.getElementById('ch6-co-cum').textContent = fmtNum(ch6CoKg / 1000, 3);
+        document.getElementById('ch7-nox-cum').textContent = fmtNum(ch7NoxKg / 1000, 3);
+        document.getElementById('ch7-co-cum').textContent = fmtNum(ch7CoKg / 1000, 3);
+        document.querySelectorAll('.unit-text').forEach(el => (el.textContent = 'טון'));
+      }
+
+      // Stack details
+      document.getElementById('ch6-nox-conc').textContent = fmtNum(appState.config.ch6.noxMgNm3, 1);
+      document.getElementById('ch6-co-conc').textContent = fmtNum(appState.config.ch6.coMgNm3, 1);
+      document.getElementById('ch7-nox-conc').textContent = fmtNum(appState.config.ch7.noxMgNm3, 1);
+      document.getElementById('ch7-co-conc').textContent = fmtNum(appState.config.ch7.coMgNm3, 1);
+
+      document.getElementById('ch6-flow-label').textContent = appState.config.ch6.flowNm3PerHour.toLocaleString('en-US');
+      document.getElementById('ch7-flow-label').textContent = appState.config.ch7.flowNm3PerHour.toLocaleString('en-US');
+
+      const noxShare6 = totalNoxRate > 0 ? Math.round((ch6NoxRate / totalNoxRate) * 100) : 50;
+      const noxShare7 = 100 - noxShare6;
+      document.getElementById('nox-ch6-share').textContent = `${noxShare6}%`;
+      document.getElementById('nox-ch7-share').textContent = `${noxShare7}%`;
+      document.getElementById('nox-ch6-bar').style.width = `${noxShare6}%`;
+      document.getElementById('nox-ch7-bar').style.width = `${noxShare7}%`;
+
+      const coShare6 = totalCoRate > 0 ? Math.round((ch6CoRate / totalCoRate) * 100) : 50;
+      const coShare7 = 100 - coShare6;
+      document.getElementById('co-ch6-share').textContent = `${coShare6}%`;
+      document.getElementById('co-ch7-share').textContent = `${coShare7}%`;
+      document.getElementById('co-ch6-bar').style.width = `${coShare6}%`;
+      document.getElementById('co-ch7-bar').style.width = `${coShare7}%`;
+
+      // Dynamic Real-Time Equivalents:
+      // 1) 1 kg NOx = 1,000,000,000 µg -> divided by 10 µg/m^3 target value = 100,000,000 m^3 = 100 million m^3
+      const millionCubicMetersAir = totalNoxKg * 100;
+      document.getElementById('equiv-air-volume').textContent = fmtNum(millionCubicMetersAir, 1);
+
+      // 2) Passenger car ~0.25g NOx/km -> 4,000 km per 1 kg NOx
+      const carKm = Math.round(totalNoxKg * 4000);
+      document.getElementById('equiv-car-km').textContent = carKm.toLocaleString('en-US');
+    }
+
+    function setDisplayUnit(unit) {
+      appState.unit = unit;
+      const kgBtn = document.getElementById('btn-unit-kg');
+      const tonsBtn = document.getElementById('btn-unit-tons');
+
+      if (unit === 'kg') {
+        kgBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition-all bg-ember text-asphalt shadow';
+        tonsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition-all text-mutedSlate hover:text-offWhite';
+      } else {
+        tonsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition-all bg-ember text-asphalt shadow';
+        kgBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition-all text-mutedSlate hover:text-offWhite';
+      }
+      renderTick();
+    }
+
+    // Top simulation controls
+    document.querySelectorAll('.sim-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-sim-days');
+        appState.simDaysOffset = val === 'realtime' ? null : Number(val);
+        appState.simAnchorWallClock = Date.now();
+
+        document.querySelectorAll('.sim-btn').forEach(b => {
+          b.className = 'sim-btn px-3 py-1.5 rounded-xl font-medium transition-all border border-borderDark bg-surface hover:bg-surfaceElevated text-mutedSlate hover:text-offWhite text-xs';
+        });
+        btn.className = 'sim-btn active-sim px-3 py-1.5 rounded-xl font-bold transition-all border border-crimson bg-crimson/20 text-white text-xs';
+
+        renderTick();
+      });
+    });
+
+    function toggleMethodology() {
+      const content = document.getElementById('methodology-content');
+      const arrow = document.getElementById('methodology-arrow');
+      const btn = document.getElementById('methodology-toggle');
+      const isHidden = content.classList.contains('hidden');
+
+      if (isHidden) {
+        content.classList.remove('hidden');
+        arrow.classList.add('rotate-180');
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        content.classList.add('hidden');
+        arrow.classList.remove('rotate-180');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    function applyManualCalibration() {
+      const flow = Number(document.getElementById('slider-flow-per-stack').value);
+      const nox = Number(document.getElementById('slider-nox-conc').value);
+      const co = Number(document.getElementById('slider-co-conc').value);
+
+      appState.config.ch6.flowNm3PerHour = flow;
+      appState.config.ch7.flowNm3PerHour = flow;
+      appState.config.ch6.noxMgNm3 = nox;
+      appState.config.ch7.noxMgNm3 = nox;
+      appState.config.ch6.coMgNm3 = co;
+      appState.config.ch7.coMgNm3 = co;
+
+      document.getElementById('label-flow-per-stack').textContent = `${flow.toLocaleString('en-US')} Nm³/h`;
+      document.getElementById('label-nox-conc').textContent = `${fmtNum(nox, 1)} mg/Nm³`;
+      document.getElementById('label-co-conc').textContent = `${fmtNum(co, 1)} mg/Nm³`;
+
+      renderTick();
+    }
+
+    function syncSlidersWithState() {
+      const flow = appState.config.ch6.flowNm3PerHour;
+      const nox = appState.config.ch6.noxMgNm3;
+      const co = appState.config.ch6.coMgNm3;
+
+      document.getElementById('slider-flow-per-stack').value = flow;
+      document.getElementById('slider-nox-conc').value = nox;
+      document.getElementById('slider-co-conc').value = co;
+
+      document.getElementById('label-flow-per-stack').textContent = `${flow.toLocaleString('en-US')} Nm³/h`;
+      document.getElementById('label-nox-conc').textContent = `${fmtNum(nox, 1)} mg/Nm³`;
+      document.getElementById('label-co-conc').textContent = `${fmtNum(co, 1)} mg/Nm³`;
+    }
+
+    function resetCalibration() {
+      appState.config = JSON.parse(JSON.stringify(PERMIT_DEFAULTS));
+      syncSlidersWithState();
+      renderTick();
+      showToast('הערכים אופסו לתקרות היתר פליטה 2211 (102,100 Nm³/h)');
+    }
+
+    function buildDynamicShareMessage() {
+      const { elapsedDays, totalNoxKg, totalCoKg, isPreHearing } = appState.latestSnapshot;
+      const noxTons = fmtNum(totalNoxKg / 1000, 2);
+      const coTons = fmtNum(totalCoKg / 1000, 2);
+
+      if (isPreHearing) {
+        return `הדיון נדחה. הזמן חולף — והזיהום באשדוד נמשך! עתירת שומרי הבית ומגמה ירוקה נגד היתר פליטה 2211 (אתר 360767): כל יום של עיכוב מאפשר הפעלת מנועי בעירה פנימית מיושנים ופליטת NOx, CO ופורמאלדהיד המסרטן. עקבו אחרי הנתונים בזמן אמת:`;
+      }
+      return `הדיון נדחה. הזמן חולף — והזיהום באשדוד נמשך! כבר ${elapsedDays} ימים חלפו מאז דחיית הדיון (22/11/2026) בעתירת שומרי הבית ומגמה ירוקה נגד היתר פליטה 2211: מארובות CH6 ו-CH7 בלבד נפלטו כבר ${noxTons} טון תחמוצות חנקן (NOx) ו-${coTons} טון פחמן חד-חמצני (CO). צפו במונה החי:`;
+    }
+
+    function shareWhatsApp() {
+      const payload = `${buildDynamicShareMessage()} ${window.location.href}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(payload)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function shareTelegram() {
+      const text = buildDynamicShareMessage();
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function shareFacebook() {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function shareX() {
+      const text = buildDynamicShareMessage();
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function copyShareMessage() {
+      const textToCopy = `${buildDynamicShareMessage()}\n${window.location.href}`;
+      const helper = document.createElement('textarea');
+      helper.value = textToCopy;
+      helper.setAttribute('readonly', '');
+      helper.style.position = 'fixed';
+      helper.style.opacity = '0';
+      document.body.appendChild(helper);
+      helper.select();
+      try {
+        document.execCommand('copy');
+        showToast('הודעת השיתוף עם הנתונים החיים הועתקה ללוח!');
+      } catch (e) {
+        showToast('העתיקו את כתובת העמוד משורת הדפדפן לשיתוף');
+      } finally {
+        document.body.removeChild(helper);
+      }
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast-notification');
+      document.getElementById('toast-message').textContent = msg;
+      el.classList.remove('opacity-0', 'translate-y-4');
+      el.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.remove('opacity-100', 'translate-y-0');
+        el.classList.add('opacity-0', 'translate-y-4');
+      }, 3200);
+    }
+
+    window.onload = async function () {
+      await fetchLiveEmissionsJson();
+      renderTick();
+      setInterval(renderTick, 1000);
+    };
+  </script>
+</body>
+</html>
