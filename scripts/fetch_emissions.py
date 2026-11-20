@@ -32,6 +32,11 @@ FLOW_RATES_NM3_H = {
     "CH7": get_env_float("FLOW_RATE_CH7", 102100.0),
 }
 
+TOKEN_URL = get_env_str(
+    "SVIVA_TOKEN_URL",
+    "https://air-fapi.sviva.gov.il/v1/GenerateToken",
+)
+
 API_BASE_URL = get_env_str(
     "SVIVA_API_URL",
     "https://air-fapi.sviva.gov.il/v1/envista/stations",
@@ -56,7 +61,7 @@ OUTPUT_PATH = Path("data/emissions.json")
 
 BASE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-    "Accept": "application/json",
+    "Accept": "application/json, text/plain, */*",
     "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
     "Origin": "https://air-factories.sviva.gov.il",
     "Referer": "https://air-factories.sviva.gov.il/",
@@ -80,111 +85,80 @@ class EnvistaClient:
             urllib.request.HTTPCookieProcessor(self.cj),
         )
 
-    def _extract_cookie_from_headers(self, resp) -> str:
+    def _extract_cookie_from_headers(self, headers_obj) -> str:
         for cookie in self.cj:
             if cookie.name == "X-Access-Token" and cookie.value:
                 return cookie.value
-        set_cookies = resp.headers.get_all("Set-Cookie") or []
+        set_cookies = headers_obj.get_all("Set-Cookie") or []
         for header_val in set_cookies:
             match = re.search(r"X-Access-Token=([^;]+)", header_val)
             if match:
                 return match.group(1).strip()
         return ""
 
-    def obtain_jwt_cookie(self) -> str:
-        """ממיר את ה-ApiToken לעוגיית X-Access-Token מול נקודות הקצה של המערכת."""
+    def generate_token(self) -> str:
+        """שולח בקשת POST ל-GenerateToken עם ApiToken ומחלץ את עוגיית X-Access-Token."""
         if not self.api_token:
-            return ""
+            raise RuntimeError("משתנה הסביבה SVIVA_API_TOKEN חסר. יש להגדירו ב-GitHub Secrets.")
         if self.access_token:
             return self.access_token
 
-        auth_endpoints = [
-            "https://air-fapi.sviva.gov.il/v1/envista/isregularuser",
-            "https://air-fapi.sviva.gov.il/v1/envista/stations",
-            "https://air-fapi.sviva.gov.il/v1/envista/login",
-            "https://air-factories.sviva.gov.il/",
-        ]
+        headers = {
+            **BASE_HEADERS,
+            "Authorization": f"ApiToken {self.api_token}",
+        }
+        req = urllib.request.Request(TOKEN_URL, data=b"", headers=headers, method="POST")
 
-        for endpoint in auth_endpoints:
-            try:
-                headers = dict(BASE_HEADERS)
-                headers["Authorization"] = f"ApiToken {self.api_token}"
-                req = urllib.request.Request(endpoint, headers=headers)
-                with self.opener.open(req, timeout=20) as resp:
-                    tok = self._extract_cookie_from_headers(resp)
-                    resp.read()
-                    if tok:
-                        self.access_token = tok
-                        print("התקבלה עוגיית X-Access-Token בהצלחה.")
-                        return tok
-            except urllib.error.HTTPError as err:
-                tok = self._extract_cookie_from_headers(err)
-                if tok:
-                    self.access_token = tok
-                    print("התקבלה עוגיית X-Access-Token בהצלחה.")
-                    return tok
-            except Exception:
-                continue
+        try:
+            with self.opener.open(req, timeout=25) as resp:
+                tok = self._extract_cookie_from_headers(resp.headers)
+                body = resp.read().decode("utf-8", errors="ignore").strip()
+                if not tok and body:
+                    if body.startswith("eyJ"):
+                        tok = body.strip('"')
+                    else:
+                        try:
+                            parsed = json.loads(body)
+                            if isinstance(parsed, str) and parsed.startswith("eyJ"):
+                                tok = parsed
+                            elif isinstance(parsed, dict):
+                                tok = (
+                                    parsed.get("token")
+                                    or parsed.get("accessToken")
+                                    or parsed.get("access_token")
+                                    or parsed.get("jwtToken")
+                                    or ""
+                                )
+                        except Exception:
+                            pass
+        except urllib.error.HTTPError as err:
+            err_body = err.read().decode("utf-8", errors="ignore")[:300]
+            raise RuntimeError(f"GenerateToken נכשל עם HTTP {err.code}: {err_body}") from err
 
-        return ""
+        if not tok:
+            raise RuntimeError("GenerateToken הצליח אך לא התקבל X-Access-Token בתגובה.")
+
+        self.access_token = tok
+        print("התקבלה עוגיית X-Access-Token חדשה מ-GenerateToken בהצלחה.")
+        return tok
 
     def get_json(self, url: str):
-        if not self.api_token:
-            raise RuntimeError("משתנה הסביבה SVIVA_API_TOKEN חסר. יש להגדירו ב-GitHub Secrets.")
-
-        jwt_cookie = self.obtain_jwt_cookie()
-
-        # בניית רשימת אסטרטגיות פנייה לפי סדר עדיפות
-        strategies = []
-        if jwt_cookie:
-            strategies.append({
-                **BASE_HEADERS,
-                "Accept": "application/json",
-                "Authorization": "JwtToken",
-                "Cookie": f"X-Access-Token={jwt_cookie}",
-            })
-            strategies.append({
-                **BASE_HEADERS,
-                "Accept": "*/*",
-                "Authorization": "JwtToken",
-                "Cookie": f"X-Access-Token={jwt_cookie}",
-            })
-
-        strategies.append({
+        jwt_cookie = self.generate_token()
+        headers = {
             **BASE_HEADERS,
-            "Accept": "application/json",
-            "Authorization": f"ApiToken {self.api_token}",
-        })
-        strategies.append({
-            **BASE_HEADERS,
-            "Accept": "*/*",
-            "Authorization": f"ApiToken {self.api_token}",
-        })
-
-        last_error = None
-        for idx, headers in enumerate(strategies, start=1):
-            req = urllib.request.Request(url, headers=headers)
-            try:
-                with self.opener.open(req, timeout=30) as resp:
-                    raw_text = resp.read().decode("utf-8")
-                    return json.loads(raw_text)
-            except urllib.error.HTTPError as err:
-                err_body = ""
-                try:
-                    err_body = err.read().decode("utf-8", errors="ignore")[:300]
-                except Exception:
-                    pass
-                print(f"ניסיון {idx} החזיר HTTP {err.code} ({err.reason}): {err_body}")
-                last_error = err
-            except Exception as exc:
-                print(f"ניסיון {idx} נכשל: {exc}")
-                last_error = exc
-
-        raise last_error
+            "Authorization": "JwtToken",
+            "Cookie": f"X-Access-Token={jwt_cookie}",
+        }
+        req = urllib.request.Request(url, headers=headers, method="GET")
+        try:
+            with self.opener.open(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as err:
+            err_body = err.read().decode("utf-8", errors="ignore")[:300]
+            raise RuntimeError(f"שליפת נתונים נכשלה (HTTP {err.code}): {err_body}") from err
 
 
 def fetch_window(client: EnvistaClient, station_id: str, filter_channels: str, start_dt: datetime, end_dt: datetime) -> list:
-    # עיגול לשעות עגולות בהתאם לפורמט של API המשרד להגנת הסביבה
     start_clean = start_dt.replace(minute=0, second=0, microsecond=0)
     end_clean = end_dt.replace(minute=0, second=0, microsecond=0)
 
