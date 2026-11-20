@@ -6,6 +6,7 @@ import ssl
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -32,11 +33,11 @@ FLOW_RATES_NM3_H = {
     "CH7": get_env_float("FLOW_RATE_CH7", 102100.0),
 }
 
+PORTAL_URL = "https://air-factories.sviva.gov.il/"
 TOKEN_URL = get_env_str(
     "SVIVA_TOKEN_URL",
     "https://air-fapi.sviva.gov.il/v1/GenerateToken",
 )
-
 API_BASE_URL = get_env_str(
     "SVIVA_API_URL",
     "https://air-fapi.sviva.gov.il/v1/envista/stations",
@@ -59,10 +60,12 @@ STATIONS_CONFIG = {
 
 OUTPUT_PATH = Path("data/emissions.json")
 
-BASE_HEADERS = {
+ENVISTA_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept": "application/json",
+    "Accept-Language": "en-US,en;q=0.9,he;q=0.8",
+    "domainname": "prod",
+    "envi-data-source": "MANA_Factories2019",
     "Origin": "https://air-factories.sviva.gov.il",
     "Referer": "https://air-factories.sviva.gov.il/",
 }
@@ -96,70 +99,139 @@ class EnvistaClient:
                 return match.group(1).strip()
         return ""
 
-    def generate_token(self) -> str:
-        """שולח בקשת POST ל-GenerateToken עם ApiToken וגוף JSON תקני."""
-        if not self.api_token:
-            raise RuntimeError("משתנה הסביבה SVIVA_API_TOKEN חסר. יש להגדירו ב-GitHub Secrets.")
+    def _try_direct_generate_token(self) -> str:
+        """ניסיון ראשון: משיכת טוקן ישירה עם כותרות Envista המלאות."""
+        xsrf_token = ""
+        try:
+            init_req = urllib.request.Request(
+                PORTAL_URL,
+                headers={"User-Agent": ENVISTA_HEADERS["User-Agent"]},
+            )
+            with self.opener.open(init_req, timeout=20) as resp:
+                html = resp.read().decode("utf-8", errors="ignore")
+                match = re.search(r'__RequestVerificationToken[^>]*value="([^"]+)"', html)
+                if match:
+                    xsrf_token = match.group(1)
+        except Exception:
+            pass
+
+        candidate_tokens = [str(uuid.uuid4())]
+        if self.api_token:
+            candidate_tokens.append(self.api_token)
+
+        for tok_candidate in candidate_tokens:
+            headers = {
+                **ENVISTA_HEADERS,
+                "Authorization": f"ApiToken {tok_candidate}",
+                "content-length": "0",
+                "contentlength": "0",
+            }
+            if xsrf_token:
+                headers["x-requestverificationtoken"] = xsrf_token
+
+            req = urllib.request.Request(TOKEN_URL, data=b"", headers=headers, method="POST")
+            try:
+                with self.opener.open(req, timeout=20) as resp:
+                    jwt_tok = self._extract_cookie_from_headers(resp.headers)
+                    if jwt_tok:
+                        print("התקבלה עוגיית X-Access-Token בהצלחה בחיבור ישיר.")
+                        return jwt_tok
+            except Exception:
+                continue
+
+        return ""
+
+    def _obtain_token_via_browser(self) -> str:
+        """ניסיון גיבוי: טעינת פורטל המשרד להגנת הסביבה בדפדפן סמוי לחילוץ X-Access-Token."""
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError as exc:
+            raise RuntimeError("חבילת playwright אינה מותקנת בסביבה.") from exc
+
+        print("מפעיל דפדפן סמוי לקבלת אסימון אבטחה ועוגיית X-Access-Token מהפורטל...")
+        captured_xsrf = ""
+        captured_api_token = ""
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(
+                user_agent=ENVISTA_HEADERS["User-Agent"],
+                locale="he-IL",
+                ignore_https_errors=True,
+            )
+            page = context.new_page()
+
+            def on_request(request):
+                nonlocal captured_xsrf, captured_api_token
+                hdrs = request.headers
+                if "x-requestverificationtoken" in hdrs and hdrs["x-requestverificationtoken"]:
+                    captured_xsrf = hdrs["x-requestverificationtoken"]
+                auth = hdrs.get("authorization", "")
+                if auth.lower().startswith("apitoken "):
+                    captured_api_token = auth.split(" ", 1)[1].strip()
+
+            page.on("request", on_request)
+
+            try:
+                page.goto(PORTAL_URL, wait_until="networkidle", timeout=45000)
+            except Exception:
+                pass
+            page.wait_for_timeout(4000)
+
+            for c in context.cookies():
+                if c.get("name") == "X-Access-Token" and c.get("value"):
+                    tok = c["value"]
+                    browser.close()
+                    print("התקבלה עוגיית X-Access-Token בהצלחה דרך הדפדפן הסמוי.")
+                    return tok
+
+            # אם האתר טרם יזם GenerateToken בעצמו, מפעילים את הבקשה מתוך הקשר הדפדפן
+            if captured_xsrf:
+                api_tok = captured_api_token or self.api_token or str(uuid.uuid4())
+                page.evaluate(
+                    """async ([url, apiTok, xsrf]) => {
+                        await fetch(url, {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'accept': 'application/json',
+                                'authorization': 'ApiToken ' + apiTok,
+                                'contentlength': '0',
+                                'domainname': 'prod',
+                                'envi-data-source': 'MANA_Factories2019',
+                                'x-requestverificationtoken': xsrf
+                            }
+                        });
+                    }""",
+                    [TOKEN_URL, api_tok, captured_xsrf],
+                )
+                page.wait_for_timeout(2000)
+                for c in context.cookies():
+                    if c.get("name") == "X-Access-Token" and c.get("value"):
+                        tok = c["value"]
+                        browser.close()
+                        print("התקבלה עוגיית X-Access-Token בהצלחה לאחר הפעלת GenerateToken.")
+                        return tok
+
+            browser.close()
+
+        raise RuntimeError("לא התקבלה עוגיית X-Access-Token גם לאחר טעינת הפורטל בדפדפן.")
+
+    def ensure_access_token(self) -> str:
         if self.access_token:
             return self.access_token
 
-        payload_candidates = [
-            ("application/json", b'{"userName":"EGuest"}'),
-            ("application/json", b'{"UserName":"EGuest"}'),
-            ("application/json", b"{}"),
-            ("application/x-www-form-urlencoded", b"userName=EGuest"),
-        ]
+        tok = self._try_direct_generate_token()
+        if not tok:
+            tok = self._obtain_token_via_browser()
 
-        last_err = None
-        for idx, (content_type, body_bytes) in enumerate(payload_candidates, start=1):
-            headers = {
-                **BASE_HEADERS,
-                "Content-Type": content_type,
-                "Authorization": f"ApiToken {self.api_token}",
-            }
-            req = urllib.request.Request(TOKEN_URL, data=body_bytes, headers=headers, method="POST")
-
-            try:
-                with self.opener.open(req, timeout=25) as resp:
-                    tok = self._extract_cookie_from_headers(resp.headers)
-                    body = resp.read().decode("utf-8", errors="ignore").strip()
-                    if not tok and body:
-                        if body.startswith("eyJ"):
-                            tok = body.strip('"')
-                        else:
-                            try:
-                                parsed = json.loads(body)
-                                if isinstance(parsed, str) and parsed.startswith("eyJ"):
-                                    tok = parsed
-                                elif isinstance(parsed, dict):
-                                    tok = (
-                                        parsed.get("token")
-                                        or parsed.get("accessToken")
-                                        or parsed.get("access_token")
-                                        or parsed.get("jwtToken")
-                                        or ""
-                                    )
-                            except Exception:
-                                pass
-
-                    if tok:
-                        self.access_token = tok
-                        print(f"התקבלה עוגיית X-Access-Token חדשה מ-GenerateToken בהצלחה (ניסיון {idx}).")
-                        return tok
-            except urllib.error.HTTPError as err:
-                err_body = err.read().decode("utf-8", errors="ignore")[:300]
-                print(f"GenerateToken ניסיון {idx} החזיר HTTP {err.code}: {err_body}")
-                last_err = err
-            except Exception as exc:
-                print(f"GenerateToken ניסיון {idx} נכשל: {exc}")
-                last_err = exc
-
-        raise RuntimeError(f"GenerateToken נכשל בכל הניסיונות: {last_err}")
+        self.access_token = tok
+        return tok
 
     def get_json(self, url: str):
-        jwt_cookie = self.generate_token()
+        jwt_cookie = self.ensure_access_token()
         headers = {
-            **BASE_HEADERS,
+            **ENVISTA_HEADERS,
             "Authorization": "JwtToken",
             "Cookie": f"X-Access-Token={jwt_cookie}",
         }
