@@ -1,6 +1,7 @@
 import http.cookiejar
 import json
 import os
+import re
 import ssl
 import urllib.error
 import urllib.parse
@@ -53,9 +54,10 @@ STATIONS_CONFIG = {
 
 OUTPUT_PATH = Path("data/emissions.json")
 
-COMMON_HEADERS = {
+BASE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
+    "Accept": "application/json",
+    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
     "Origin": "https://air-factories.sviva.gov.il",
     "Referer": "https://air-factories.sviva.gov.il/",
 }
@@ -71,82 +73,125 @@ def create_ssl_context():
 class EnvistaClient:
     def __init__(self, api_token: str):
         self.api_token = api_token
+        self.access_token = ""
         self.cj = http.cookiejar.CookieJar()
         self.opener = urllib.request.build_opener(
             urllib.request.HTTPSHandler(context=create_ssl_context()),
             urllib.request.HTTPCookieProcessor(self.cj),
         )
 
-    def get_access_cookie(self) -> str:
+    def _extract_cookie_from_headers(self, resp) -> str:
         for cookie in self.cj:
             if cookie.name == "X-Access-Token" and cookie.value:
                 return cookie.value
+        set_cookies = resp.headers.get_all("Set-Cookie") or []
+        for header_val in set_cookies:
+            match = re.search(r"X-Access-Token=([^;]+)", header_val)
+            if match:
+                return match.group(1).strip()
         return ""
 
-    def refresh_jwt_cookie(self) -> str:
-        """מבצע פנייה עם ApiToken כדי לקבל מהשרת את עוגיית X-Access-Token."""
+    def obtain_jwt_cookie(self) -> str:
+        """ממיר את ה-ApiToken לעוגיית X-Access-Token מול נקודות הקצה של המערכת."""
         if not self.api_token:
             return ""
+        if self.access_token:
+            return self.access_token
 
-        endpoints = [
-            "https://air-fapi.sviva.gov.il/v1/envista/stations",
+        auth_endpoints = [
             "https://air-fapi.sviva.gov.il/v1/envista/isregularuser",
-            "https://air-fapi.sviva.gov.il/v1/envista/login/guest",
+            "https://air-fapi.sviva.gov.il/v1/envista/stations",
+            "https://air-fapi.sviva.gov.il/v1/envista/login",
             "https://air-factories.sviva.gov.il/",
         ]
-        for url in endpoints:
-            if self.get_access_cookie():
-                break
+
+        for endpoint in auth_endpoints:
             try:
-                headers = dict(COMMON_HEADERS)
+                headers = dict(BASE_HEADERS)
                 headers["Authorization"] = f"ApiToken {self.api_token}"
-                req = urllib.request.Request(url, headers=headers)
+                req = urllib.request.Request(endpoint, headers=headers)
                 with self.opener.open(req, timeout=20) as resp:
+                    tok = self._extract_cookie_from_headers(resp)
                     resp.read()
+                    if tok:
+                        self.access_token = tok
+                        print("התקבלה עוגיית X-Access-Token בהצלחה.")
+                        return tok
+            except urllib.error.HTTPError as err:
+                tok = self._extract_cookie_from_headers(err)
+                if tok:
+                    self.access_token = tok
+                    print("התקבלה עוגיית X-Access-Token בהצלחה.")
+                    return tok
             except Exception:
                 continue
 
-        return self.get_access_cookie()
+        return ""
 
     def get_json(self, url: str):
         if not self.api_token:
             raise RuntimeError("משתנה הסביבה SVIVA_API_TOKEN חסר. יש להגדירו ב-GitHub Secrets.")
 
-        # ניסיון 1: שליחה ישירה עם ApiToken (או עם עוגיית X-Access-Token אם כבר נאספה)
-        jwt_cookie = self.get_access_cookie()
-        headers = dict(COMMON_HEADERS)
+        jwt_cookie = self.obtain_jwt_cookie()
+
+        # בניית רשימת אסטרטגיות פנייה לפי סדר עדיפות
+        strategies = []
         if jwt_cookie:
-            headers["Authorization"] = "JwtToken"
-            headers["Cookie"] = f"X-Access-Token={jwt_cookie}"
-        else:
-            headers["Authorization"] = f"ApiToken {self.api_token}"
+            strategies.append({
+                **BASE_HEADERS,
+                "Accept": "application/json",
+                "Authorization": "JwtToken",
+                "Cookie": f"X-Access-Token={jwt_cookie}",
+            })
+            strategies.append({
+                **BASE_HEADERS,
+                "Accept": "*/*",
+                "Authorization": "JwtToken",
+                "Cookie": f"X-Access-Token={jwt_cookie}",
+            })
 
-        req = urllib.request.Request(url, headers=headers)
-        try:
-            with self.opener.open(req, timeout=30) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError as err:
-            if err.code != 401:
-                raise
+        strategies.append({
+            **BASE_HEADERS,
+            "Accept": "application/json",
+            "Authorization": f"ApiToken {self.api_token}",
+        })
+        strategies.append({
+            **BASE_HEADERS,
+            "Accept": "*/*",
+            "Authorization": f"ApiToken {self.api_token}",
+        })
 
-        # ניסיון 2: קבלת עוגיית X-Access-Token באמצעות ApiToken ואז פנייה עם JwtToken
-        jwt_cookie = self.refresh_jwt_cookie()
-        if not jwt_cookie:
-            raise RuntimeError("השרת החזיר 401 ולא הנפיק עוגיית X-Access-Token גם עם ApiToken.")
+        last_error = None
+        for idx, headers in enumerate(strategies, start=1):
+            req = urllib.request.Request(url, headers=headers)
+            try:
+                with self.opener.open(req, timeout=30) as resp:
+                    raw_text = resp.read().decode("utf-8")
+                    return json.loads(raw_text)
+            except urllib.error.HTTPError as err:
+                err_body = ""
+                try:
+                    err_body = err.read().decode("utf-8", errors="ignore")[:300]
+                except Exception:
+                    pass
+                print(f"ניסיון {idx} החזיר HTTP {err.code} ({err.reason}): {err_body}")
+                last_error = err
+            except Exception as exc:
+                print(f"ניסיון {idx} נכשל: {exc}")
+                last_error = exc
 
-        retry_headers = dict(COMMON_HEADERS)
-        retry_headers["Authorization"] = "JwtToken"
-        retry_headers["Cookie"] = f"X-Access-Token={jwt_cookie}"
-        req_retry = urllib.request.Request(url, headers=retry_headers)
-        with self.opener.open(req_retry, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+        raise last_error
 
 
 def fetch_window(client: EnvistaClient, station_id: str, filter_channels: str, start_dt: datetime, end_dt: datetime) -> list:
+    # עיגול לשעות עגולות בהתאם לפורמט של API המשרד להגנת הסביבה
+    start_clean = start_dt.replace(minute=0, second=0, microsecond=0)
+    end_clean = end_dt.replace(minute=0, second=0, microsecond=0)
+
     params = {
         "filterChannels": filter_channels,
-        "from": start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
-        "to": end_dt.strftime("%Y-%m-%dT%H:%M:%S"),
+        "from": start_clean.strftime("%Y-%m-%dT%H:%M:%S"),
+        "to": end_clean.strftime("%Y-%m-%dT%H:%M:%S"),
         "fromTimebase": "60",
         "toTimebase": "60",
         "precentValid": "75",
