@@ -82,6 +82,7 @@ class EnvistaClient:
     def __init__(self, api_token: str):
         self.api_token = api_token
         self.access_token = ""
+        self.xsrf_token = ""
         self.cj = http.cookiejar.CookieJar()
         self.opener = urllib.request.build_opener(
             urllib.request.HTTPSHandler(context=create_ssl_context()),
@@ -100,7 +101,6 @@ class EnvistaClient:
         return ""
 
     def _try_direct_generate_token(self) -> str:
-        """ניסיון ראשון: משיכת טוקן ישירה עם כותרות Envista המלאות."""
         xsrf_token = ""
         try:
             init_req = urllib.request.Request(
@@ -134,6 +134,7 @@ class EnvistaClient:
                 with self.opener.open(req, timeout=20) as resp:
                     jwt_tok = self._extract_cookie_from_headers(resp.headers)
                     if jwt_tok:
+                        self.xsrf_token = xsrf_token
                         print("התקבלה עוגיית X-Access-Token בהצלחה בחיבור ישיר.")
                         return jwt_tok
             except Exception:
@@ -142,7 +143,6 @@ class EnvistaClient:
         return ""
 
     def _obtain_token_via_browser(self) -> str:
-        """ניסיון גיבוי: טעינת פורטל המשרד להגנת הסביבה בדפדפן סמוי לחילוץ X-Access-Token."""
         try:
             from playwright.sync_api import sync_playwright
         except ImportError as exc:
@@ -181,11 +181,11 @@ class EnvistaClient:
             for c in context.cookies():
                 if c.get("name") == "X-Access-Token" and c.get("value"):
                     tok = c["value"]
+                    self.xsrf_token = captured_xsrf
                     browser.close()
                     print("התקבלה עוגיית X-Access-Token בהצלחה דרך הדפדפן הסמוי.")
                     return tok
 
-            # אם האתר טרם יזם GenerateToken בעצמו, מפעילים את הבקשה מתוך הקשר הדפדפן
             if captured_xsrf:
                 api_tok = captured_api_token or self.api_token or str(uuid.uuid4())
                 page.evaluate(
@@ -209,6 +209,7 @@ class EnvistaClient:
                 for c in context.cookies():
                     if c.get("name") == "X-Access-Token" and c.get("value"):
                         tok = c["value"]
+                        self.xsrf_token = captured_xsrf
                         browser.close()
                         print("התקבלה עוגיית X-Access-Token בהצלחה לאחר הפעלת GenerateToken.")
                         return tok
@@ -235,10 +236,17 @@ class EnvistaClient:
             "Authorization": "JwtToken",
             "Cookie": f"X-Access-Token={jwt_cookie}",
         }
+        if self.xsrf_token:
+            headers["x-requestverificationtoken"] = self.xsrf_token
+
         req = urllib.request.Request(url, headers=headers, method="GET")
         try:
             with self.opener.open(req, timeout=30) as resp:
-                return json.loads(resp.read().decode("utf-8"))
+                raw_text = resp.read().decode("utf-8", errors="ignore").strip()
+                # השרת מחזיר תשובה ריקה (HTTP 200/204) כאשר אין מדידות פעילות בחלון הזמן
+                if not raw_text:
+                    return []
+                return json.loads(raw_text)
         except urllib.error.HTTPError as err:
             err_body = err.read().decode("utf-8", errors="ignore")[:300]
             raise RuntimeError(f"שליפת נתונים נכשלה (HTTP {err.code}): {err_body}") from err
@@ -395,15 +403,28 @@ def main():
 
     if now_ist < START_TIME:
         print(f"טרם הגיע מועד ההתחלה ({START_TIME.isoformat()}). מבצע בדיקת תקשורת מול שתי הארובות...")
+        sample_start = datetime(2026, 11, 13, 1, 0, 0, tzinfo=IST)
+        sample_end = datetime(2026, 11, 14, 0, 0, 0, tzinfo=IST)
+
         for st_key, cfg in STATIONS_CONFIG.items():
-            test_records = fetch_window(
+            recent_records = fetch_window(
                 client,
                 cfg["station_id"],
                 cfg["filter_channels"],
                 now_ist - timedelta(hours=24),
                 now_ist,
             )
-            print(f"[{st_key}] בדיקת תקשורת (תחנה {cfg['station_id']}) הצליחה! התקבלו {len(test_records)} רשומות שעתיות.")
+            sample_records = fetch_window(
+                client,
+                cfg["station_id"],
+                cfg["filter_channels"],
+                sample_start,
+                sample_end,
+            )
+            print(
+                f"[{st_key}] בדיקת תקשורת (תחנה {cfg['station_id']}) הצליחה! "
+                f"מדידות ב-24 שעות אחרונות: {len(recent_records)} | מדידות בחלון בדיקה (13/11): {len(sample_records)}."
+            )
         if not OUTPUT_PATH.exists():
             write_initial_json()
         return
