@@ -2,9 +2,7 @@ name: Update Ashdod Permit 2211 Emissions Data
 
 on:
   schedule:
-    # רץ אוטומטית מדי שעה עגולה (בדקה ה-05)
     - cron: '5 * * * *'
-  # מאפשר להריץ בדיקה ידנית בלחיצת כפתור מתוך ממשק GitHub
   workflow_dispatch:
 
 permissions:
@@ -25,6 +23,7 @@ jobs:
 
       - name: Fetch latest stack monitoring data
         env:
+          SVIVA_API_TOKEN: ${{ secrets.SVIVA_API_TOKEN }}
           SVIVA_API_URL: ${{ vars.SVIVA_API_URL }}
           CH6_STATION_ID: ${{ vars.CH6_STATION_ID }}
           CH6_CHANNELS: ${{ vars.CH6_CHANNELS }}
