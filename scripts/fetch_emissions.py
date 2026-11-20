@@ -1,6 +1,8 @@
+import http.cookiejar
 import json
 import os
 import ssl
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone, timedelta
@@ -30,6 +32,8 @@ API_BASE_URL = get_env_str(
     "https://air-fapi.sviva.gov.il/v1/envista/stations",
 ).rstrip("/")
 
+CUSTOM_AUTH_URL = get_env_str("SVIVA_AUTH_URL", "")
+
 STATIONS_CONFIG = {
     "CH6": {
         "station_id": get_env_str("CH6_STATION_ID", "461"),
@@ -47,6 +51,13 @@ STATIONS_CONFIG = {
 
 OUTPUT_PATH = Path("data/emissions.json")
 
+COMMON_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*",
+    "Origin": "https://air-factories.sviva.gov.il",
+    "Referer": "https://air-factories.sviva.gov.il/",
+}
+
 
 def create_ssl_context():
     ctx = ssl.create_default_context()
@@ -55,7 +66,78 @@ def create_ssl_context():
     return ctx
 
 
-def fetch_window(station_id: str, filter_channels: str, start_dt: datetime, end_dt: datetime) -> list:
+def build_session_opener():
+    """יוצר חיבור עם CookieJar שמושך ושומר אוטומטית את עוגיית X-Access-Token."""
+    cj = http.cookiejar.CookieJar()
+    opener = urllib.request.build_opener(
+        urllib.request.HTTPSHandler(context=create_ssl_context()),
+        urllib.request.HTTPCookieProcessor(cj),
+    )
+
+    def get_access_token() -> str:
+        for cookie in cj:
+            if cookie.name == "X-Access-Token" and cookie.value:
+                return cookie.value
+        return ""
+
+    # רשימת כתובות אפשריות להנפקת טוקן אורח (EGuest) במערכת Envista
+    candidates = []
+    if CUSTOM_AUTH_URL:
+        candidates.append(("GET", CUSTOM_AUTH_URL))
+        candidates.append(("POST", CUSTOM_AUTH_URL))
+
+    candidates.extend([
+        ("GET", "https://air-factories.sviva.gov.il/"),
+        ("GET", "https://air-fapi.sviva.gov.il/v1/envista/login/guest"),
+        ("POST", "https://air-fapi.sviva.gov.il/v1/envista/login/guest"),
+        ("GET", "https://air-fapi.sviva.gov.il/v1/envista/authentication/guest"),
+        ("POST", "https://air-fapi.sviva.gov.il/v1/envista/authentication/guest"),
+        ("GET", "https://air-fapi.sviva.gov.il/v1/envista/isregularuser"),
+        ("GET", "https://air-factories.sviva.gov.il/api/isregularuser"),
+    ])
+
+    for method, url in candidates:
+        if get_access_token():
+            break
+        try:
+            data = b"{}" if method == "POST" else None
+            headers = dict(COMMON_HEADERS)
+            if method == "POST":
+                headers["Content-Type"] = "application/json"
+            req = urllib.request.Request(url, data=data, headers=headers, method=method)
+            with opener.open(req, timeout=20) as resp:
+                body = resp.read().decode("utf-8", errors="ignore")
+                # לעיתים הטוקן מוחזר גם בגוף התשובה כ-JSON
+                if not get_access_token() and "eyJ" in body:
+                    try:
+                        parsed = json.loads(body)
+                        tok = parsed.get("token") or parsed.get("accessToken") or parsed.get("access_token")
+                        if tok:
+                            cj.set_cookie(
+                                http.cookiejar.Cookie(
+                                    version=0, name="X-Access-Token", value=tok,
+                                    port=None, port_specified=False,
+                                    domain=".sviva.gov.il", domain_specified=True, domain_initial_dot=True,
+                                    path="/", path_specified=True,
+                                    secure=True, expires=None, discard=True,
+                                    comment=None, comment_url=None, rest={},
+                                )
+                            )
+                    except Exception:
+                        pass
+        except Exception:
+            continue
+
+    token = get_access_token()
+    if token:
+        print("התקבלה עוגיית X-Access-Token חדשה בהצלחה.")
+    else:
+        print("אזהרה: לא התקבלה עוגיית X-Access-Token אוטומטית מהכתובות הסטנדרטיות.")
+
+    return opener, token
+
+
+def fetch_window(opener, token: str, station_id: str, filter_channels: str, start_dt: datetime, end_dt: datetime) -> list:
     params = {
         "filterChannels": filter_channels,
         "from": start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -72,33 +154,40 @@ def fetch_window(station_id: str, filter_channels: str, start_dt: datetime, end_
     query_str = urllib.parse.urlencode(params, safe=",:")
     url = f"{API_BASE_URL}/{station_id}/Average?{query_str}"
 
-    req = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "Accept": "application/json",
-            "Origin": "https://air-factories.sviva.gov.il",
-            "Referer": "https://air-factories.sviva.gov.il/",
-        },
-    )
+    headers = dict(COMMON_HEADERS)
+    headers["Authorization"] = "JwtToken"
+    if token:
+        headers["Cookie"] = f"X-Access-Token={token}"
 
-    with urllib.request.urlopen(req, context=create_ssl_context(), timeout=30) as resp:
-        payload = json.loads(resp.read().decode("utf-8"))
-        if isinstance(payload, list):
-            return payload
-        if isinstance(payload, dict):
-            return payload.get("data", payload.get("items", []))
-        return []
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with opener.open(req, timeout=30) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as err:
+        if err.code == 401 and token:
+            # ניסיון חלופי עם צירוף הטוקן גם לכותרת Authorization
+            headers["Authorization"] = f"JwtToken {token}"
+            req_retry = urllib.request.Request(url, headers=headers)
+            with opener.open(req_retry, timeout=30) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+        else:
+            raise
+
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict):
+        return payload.get("data", payload.get("items", []))
+    return []
 
 
-def fetch_station_data(cfg: dict, start_dt: datetime, end_dt: datetime) -> list:
+def fetch_station_data(opener, token: str, cfg: dict, start_dt: datetime, end_dt: datetime) -> list:
     all_records = []
     cursor = start_dt
     step = timedelta(days=14)
 
     while cursor < end_dt:
         chunk_end = min(cursor + step, end_dt)
-        records = fetch_window(cfg["station_id"], cfg["filter_channels"], cursor, chunk_end)
+        records = fetch_window(opener, token, cfg["station_id"], cfg["filter_channels"], cursor, chunk_end)
         all_records.extend(records)
         cursor = chunk_end
 
@@ -210,10 +299,14 @@ def main():
         with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
             existing_data = json.load(f)
 
+    opener, token = build_session_opener()
+
     if now_ist < START_TIME:
         print(f"טרם הגיע מועד ההתחלה ({START_TIME.isoformat()}). מבצע בדיקת תקשורת מול שתי הארובות...")
         for st_key, cfg in STATIONS_CONFIG.items():
             test_records = fetch_window(
+                opener,
+                token,
                 cfg["station_id"],
                 cfg["filter_channels"],
                 now_ist - timedelta(hours=24),
@@ -229,7 +322,7 @@ def main():
 
     for st_key, cfg in STATIONS_CONFIG.items():
         try:
-            records = fetch_station_data(cfg, START_TIME, now_ist)
+            records = fetch_station_data(opener, token, cfg, START_TIME, now_ist)
             stations_result[st_key] = calculate_station_totals(records, st_key, cfg)
             print(f"[{st_key}] עודכן בהצלחה: {stations_result[st_key]}")
         except Exception as exc:
