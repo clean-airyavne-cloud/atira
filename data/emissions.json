@@ -1,43 +1,33 @@
 {
-"lastUpdated": "2026-11-22T09:00:00+02:00",
-"startDate": "2026-11-22T09:00:00+02:00",
-"permitNumber": "2211",
-"siteEnvId": "360767",
-"sourceStatus": "initialized",
-"flowRatesNm3h": {
-"CH6": 102100,
-"CH7": 102100
-},
-"permitLimitsMgNm3": {
-"NOx_daily": 55,
-"NOx_annual": 50,
-"CO_annual": 40,
-"Formaldehyde_limit": 5
-},
-"stations": {
-"CH6": {
-"permitStackId": "203712",
-"NOx_kg": 0,
-"CO_kg": 0,
-"avg_NOx_mg_nm3": 0,
-"avg_CO_mg_nm3": 0,
-"activeFlowNm3h": 102100,
-"samplesCount": 0
-},
-"CH7": {
-"permitStackId": "203713",
-"NOx_kg": 0,
-"CO_kg": 0,
-"avg_NOx_mg_nm3": 0,
-"avg_CO_mg_nm3": 0,
-"activeFlowNm3h": 102100,
-"samplesCount": 0
-}
-},
-"totals": {
-"NOx_kg": 0,
-"CO_kg": 0,
-"NOx_tons": 0,
-"CO_tons": 0
-}
+  "lastUpdated": "2026-11-22T09:04:33.474954+02:00",
+  "startDate": "2026-11-22T09:00:00+02:00",
+  "permitNumber": "2211",
+  "siteId": "360767",
+  "sourceStatus": "live",
+  "flowRatesNm3h": {
+    "CH6": 102100.0,
+    "CH7": 102100.0
+  },
+  "stations": {
+    "CH6": {
+      "NOx_kg": 0.0,
+      "CO_kg": 0.0,
+      "avg_NOx_mg_nm3": 0,
+      "avg_CO_mg_nm3": 0,
+      "samplesCount": 0
+    },
+    "CH7": {
+      "NOx_kg": 0.0,
+      "CO_kg": 0.0,
+      "avg_NOx_mg_nm3": 0,
+      "avg_CO_mg_nm3": 0,
+      "samplesCount": 0
+    }
+  },
+  "totals": {
+    "NOx_kg": 0.0,
+    "CO_kg": 0.0,
+    "NOx_tons": 0.0,
+    "CO_tons": 0.0
+  }
 }
