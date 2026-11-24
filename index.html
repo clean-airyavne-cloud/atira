@@ -185,20 +185,16 @@
 
   <!-- 2. HERO SECTION -->
   <header class="relative overflow-hidden border-b border-borderDark hero-grid-overlay">
-    <!-- Dramatic Atmospheric Background + Optional External Photo + Built-in Realistic SVG Smokestacks -->
     <div class="absolute inset-0 pointer-events-none select-none">
-      <!-- Optional user-supplied photographic image (hidden gracefully if absent) -->
       <img src="./assets/hero-pollution.png"
            alt="ארובות תחנת הכוח במתקן ההתפלה באשדוד פולטות עשן ואדים לשמיים כהים"
            onerror="this.style.display='none'"
            class="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
 
-      <!-- Deep Asphalt & Fiery Ember Atmospheric Glows -->
       <div class="absolute inset-0 bg-gradient-to-b from-[#090a0f]/75 via-[#090a0f]/82 to-[#090a0f]"></div>
       <div class="absolute -top-28 right-1/4 w-[820px] h-[420px] bg-crimson/15 blur-[140px] rounded-full"></div>
       <div class="absolute top-16 left-1/4 w-[680px] h-[340px] bg-ember/15 blur-[130px] rounded-full"></div>
 
-      <!-- Built-in Dramatic Smokestacks & Toxic Smoke Silhouette (CH6 & CH7) -->
       <svg class="absolute bottom-0 left-0 w-full h-[380px] sm:h-[470px] opacity-90" viewBox="0 0 1440 470" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
         <defs>
           <radialGradient id="smokeCore" cx="50%" cy="50%" r="50%">
@@ -219,51 +215,42 @@
           </linearGradient>
         </defs>
 
-        <!-- Rising Toxic Smoke Plumes from Stack CH6 -->
         <g transform="translate(275, 165)">
           <circle class="plume-1" cx="0" cy="0" r="52" fill="url(#emberSmoke)" />
           <circle class="plume-2" cx="14" cy="-6" r="60" fill="url(#smokeCore)" />
           <circle class="plume-3" cx="-10" cy="4" r="56" fill="url(#emberSmoke)" />
         </g>
 
-        <!-- Rising Toxic Smoke Plumes from Stack CH7 -->
         <g transform="translate(435, 145)">
           <circle class="plume-4" cx="0" cy="0" r="56" fill="url(#emberSmoke)" />
           <circle class="plume-5" cx="-12" cy="-5" r="64" fill="url(#smokeCore)" />
           <circle class="plume-6" cx="10" cy="3" r="58" fill="url(#emberSmoke)" />
         </g>
 
-        <!-- Secondary Distant Plume (CHP Stacks CH1-CH5) -->
         <g transform="translate(650, 210)" opacity="0.55">
           <circle class="plume-2" cx="0" cy="0" r="44" fill="url(#smokeCore)" />
           <circle class="plume-5" cx="15" cy="5" r="48" fill="url(#emberSmoke)" />
         </g>
 
-        <!-- Industrial Desalination & Power Plant Horizon Silhouette -->
         <path d="M0,470 L0,410 L110,410 L135,368 L225,368 L225,392 L505,392 L530,348 L740,348 L765,398 L1440,398 L1440,470 Z" fill="#0c0f17" />
 
-        <!-- Stack CH6 (ID 203712) -->
         <polygon points="256,396 265,165 285,165 294,396" fill="url(#stackBody)" stroke="#222838" stroke-width="1" />
         <rect x="262" y="182" width="26" height="6" fill="#ef4444" opacity="0.75" />
         <circle class="beacon-flash" cx="275" cy="160" r="4.5" fill="#ef4444" />
         <text x="275" y="226" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" text-anchor="middle" opacity="0.75">CH6</text>
 
-        <!-- Stack CH7 (ID 203713) -->
         <polygon points="414,396 424,145 446,145 456,396" fill="url(#stackBody)" stroke="#222838" stroke-width="1" />
         <rect x="421" y="162" width="28" height="6" fill="#f97316" opacity="0.8" />
         <circle class="beacon-flash" cx="435" cy="140" r="4.5" fill="#ef4444" />
         <text x="435" y="208" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" text-anchor="middle" opacity="0.75">CH7</text>
 
-        <!-- Industrial Piping & Heat Recovery Units -->
         <rect x="565" y="300" width="115" height="94" rx="5" fill="#0e121b" stroke="#222838" stroke-width="1" />
         <line x1="292" y1="332" x2="565" y2="332" stroke="#222838" stroke-width="4" />
         <line x1="292" y1="348" x2="565" y2="348" stroke="#222838" stroke-width="3" />
       </svg>
     </div>
 
-    <!-- Hero Foreground Content -->
     <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-14 sm:pt-14 sm:pb-20">
-      <!-- Urgent Status Badge -->
       <div class="flex flex-wrap items-center gap-3 mb-6">
         <span class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-crimson/15 border border-crimson/45 text-crimson text-xs sm:text-sm font-extrabold tracking-wide shadow-lg shadow-crimson/10">
           <span class="relative flex h-2.5 w-2.5">
@@ -277,7 +264,6 @@
         </span>
       </div>
 
-      <!-- Main Power Headline -->
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-offWhite leading-[1.08] mb-5">
         הדיון נדחה.
         <span class="block text-transparent bg-clip-text bg-gradient-to-l from-crimson via-ember to-amber-400 mt-1">
@@ -285,12 +271,10 @@
         </span>
       </h1>
 
-      <!-- Subtitle -->
       <p class="max-w-3xl text-base sm:text-xl text-slate-300 font-assistant leading-relaxed mb-8">
         כל יום שבו ההכרעה המשפטית מתעכבת מאפשר הפעלת <strong class="text-offWhite font-bold">מנועי בעירה פנימית מיושנים</strong> בתחנת הכוח שבמתקן ההתפלה באשדוד — בלב אזור מוכה זיהום אוויר, תוך פליטה מתמשכת של <strong class="text-ember font-bold">תחמוצות חנקן (<span class="font-mono">NOx</span>)</strong>, <strong class="text-ember font-bold">פחמן חד-חמצני (<span class="font-mono">CO</span>)</strong> ו<strong class="text-crimson font-bold">פורמאלדהיד (<span class="font-mono">CH₂O</span>)</strong> המסרטן.
       </p>
 
-      <!-- Live Elapsed / Countdown Clock Card inside Hero -->
       <div class="bg-surface/95 backdrop-blur-md border border-borderDark rounded-3xl p-5 sm:p-7 shadow-2xl shadow-black/80 mb-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-5 border-b border-borderDark">
           <div class="flex items-center gap-2.5">
@@ -324,7 +308,6 @@
         </div>
       </div>
 
-      <!-- Hero Action Strip -->
       <div class="flex flex-wrap items-center gap-3 sm:gap-4">
         <a href="#emissions-dashboard"
            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-l from-crimson to-ember hover:opacity-95 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-crimson/25 transition-all">
@@ -365,7 +348,6 @@
           </h2>
         </div>
 
-        <!-- Instant Unit Switch: Kilograms vs Tons -->
         <div class="inline-flex items-center p-1.5 rounded-2xl bg-surface border border-borderDark self-start sm:self-auto" role="group" aria-label="בחירת יחידות מידה">
           <button type="button" id="btn-unit-kg" onclick="setDisplayUnit('kg')"
                   class="px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition-all bg-ember text-asphalt shadow">
@@ -398,7 +380,6 @@
               </div>
             </div>
 
-            <!-- Big Cumulative Readout -->
             <div class="my-5 p-5 rounded-2xl bg-[#090a0f] border border-borderDark">
               <div class="flex items-baseline gap-3 flex-wrap">
                 <span id="nox-main-value" class="tabular-nums-mono text-4xl sm:text-5xl lg:text-6xl font-extrabold text-crimson tracking-tight">
@@ -413,7 +394,6 @@
             </div>
           </div>
 
-          <!-- Stack Share Progress Bar -->
           <div class="space-y-2 pt-1">
             <div class="flex justify-between text-xs text-mutedSlate">
               <span>ארובה CH6 / 203712 (<span id="nox-ch6-share">50%</span>)</span>
@@ -444,7 +424,6 @@
               </div>
             </div>
 
-            <!-- Big Cumulative Readout -->
             <div class="my-5 p-5 rounded-2xl bg-[#090a0f] border border-borderDark">
               <div class="flex items-baseline gap-3 flex-wrap">
                 <span id="co-main-value" class="tabular-nums-mono text-4xl sm:text-5xl lg:text-6xl font-extrabold text-ember tracking-tight">
@@ -459,7 +438,6 @@
             </div>
           </div>
 
-          <!-- Stack Share Progress Bar -->
           <div class="space-y-2 pt-1">
             <div class="flex justify-between text-xs text-mutedSlate">
               <span>ארובה CH6 / 203712 (<span id="co-ch6-share">50%</span>)</span>
@@ -490,7 +468,7 @@
                 </p>
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+            <span id="ch6-status-badge" class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
               ניטור רציף
             </span>
           </div>
@@ -545,7 +523,7 @@
                 </p>
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+            <span id="ch7-status-badge" class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
               ניטור רציף
             </span>
           </div>
@@ -600,7 +578,7 @@
                 שקיפות ומתודולוגיית חישוב (מ-mg/Nm³ לטונות)
               </span>
               <span class="text-xs text-mutedSlate">
-                נוסחת ההמרה הפיזיקלית, גזירת הספיקה מהיתר 2211 (33.3 MWth בנרמול ל-15% חמצן) וכיול אינטראקטיבי
+                נוסחת ההמרה הפיזיקלית, סינון שעות הדממה (ערוץ 8), וגזירת הספיקה מהיתר 2211 (33.3 MWth)
               </span>
             </div>
           </div>
@@ -613,11 +591,11 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             <div class="space-y-3 text-sm text-slate-300 font-assistant leading-relaxed">
               <p>
-                מערכת הניטור הרציף (<span class="font-mono text-offWhite">CEMS</span>) באתר המשרד להגנת הסביבה מדווחת ריכוזים ביחידות <span class="font-mono text-ember font-bold">mg/Nm³</span> (מ״ג למ״ק תקני, גז יבש, 273.15K, 101.3kPa, מנורמל ל-<strong class="text-offWhite">15% חמצן נפחי</strong> לפי טבלאות א׳1 וא׳2 להיתר 2211). ההמרה למסה מצטברת מתבצעת לפי הנוסחה הפיזיקלית:
+                מערכת הניטור הרציף (<span class="font-mono text-offWhite">CEMS</span>) באתר המשרד להגנת הסביבה מדווחת ריכוזים ביחידות <span class="font-mono text-ember font-bold">mg/Nm³</span> (מ״ג למ״ק תקני, גז יבש, 273.15K, 101.3kPa, מנורמל ל-<strong class="text-offWhite">15% חמצן נפחי</strong> לפי טבלאות א׳1 וא׳2 להיתר 2211). שעות שבהן ערוץ סטטוס היחידה (<span class="font-mono text-offWhite">Channel 8</span>) מעיד שהמנוע בהדממה מסוננות החוצה כדי למנוע צבירת רעש רקע של חיישנים:
               </p>
 
               <div class="p-4 rounded-xl bg-[#090a0f] border border-borderDark font-mono text-xs sm:text-sm text-ember overflow-x-auto" dir="ltr">
-                Mass (kg) = (Concentration [mg/Nm³] × Flow Rate [Nm³/h] × Hours) / 1,000,000
+                Mass (kg) = (Concentration [mg/Nm³] × Flow Rate [Nm³/h] × Active Hours) / 1,000,000
                 <br />
                 Mass (tons) = Mass (kg) / 1,000
               </div>
@@ -656,7 +634,7 @@
                       <span>ריכוז NOx (תקרה 55/50)</span>
                       <span id="label-nox-conc" class="font-mono text-crimson font-bold">50.0 mg/Nm³</span>
                     </label>
-                    <input id="slider-nox-conc" type="range" min="10" max="110" step="0.5" value="50.0" class="w-full" oninput="applyManualCalibration()" />
+                    <input id="slider-nox-conc" type="range" min="0" max="110" step="0.5" value="50.0" class="w-full" oninput="applyManualCalibration()" />
                   </div>
 
                   <div>
@@ -664,7 +642,7 @@
                       <span>ריכוז CO (תקרה 40)</span>
                       <span id="label-co-conc" class="font-mono text-ember font-bold">40.0 mg/Nm³</span>
                     </label>
-                    <input id="slider-co-conc" type="range" min="5" max="100" step="0.5" value="40.0" class="w-full" oninput="applyManualCalibration()" />
+                    <input id="slider-co-conc" type="range" min="0" max="100" step="0.5" value="40.0" class="w-full" oninput="applyManualCalibration()" />
                   </div>
                 </div>
               </div>
@@ -689,7 +667,6 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Card 1: BAT Violation -->
         <article class="bg-surface border border-borderDark hover:border-crimson/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
           <div class="space-y-3">
             <div class="flex items-center justify-between">
@@ -712,7 +689,6 @@
           </div>
         </article>
 
-        <!-- Card 2: Formaldehyde Danger -->
         <article class="bg-surface border border-borderDark hover:border-crimson/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
           <div class="space-y-3">
             <div class="flex items-center justify-between">
@@ -735,7 +711,6 @@
           </div>
         </article>
 
-        <!-- Card 3: Bypassing Section 23 -->
         <article class="bg-surface border border-borderDark hover:border-ember/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
           <div class="space-y-3">
             <div class="flex items-center justify-between">
@@ -758,7 +733,6 @@
           </div>
         </article>
 
-        <!-- Card 4: National Grid Power Plant -->
         <article class="bg-surface border border-borderDark hover:border-ember/45 transition-colors rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4">
           <div class="space-y-3">
             <div class="flex items-center justify-between">
@@ -797,9 +771,7 @@
         </p>
       </div>
 
-      <!-- 3 Pollutant Impact Cards (NOx, CO, Formaldehyde) -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- NOx Health Card -->
         <div class="bg-surface border border-borderDark rounded-3xl p-6 space-y-3.5">
           <div class="flex items-center justify-between">
             <span class="px-3 py-1 rounded-lg bg-crimson/15 text-crimson font-mono font-bold text-xs">NOx / NO₂</span>
@@ -811,7 +783,6 @@
           </p>
         </div>
 
-        <!-- CO Health Card -->
         <div class="bg-surface border border-borderDark rounded-3xl p-6 space-y-3.5">
           <div class="flex items-center justify-between">
             <span class="px-3 py-1 rounded-lg bg-ember/15 text-ember font-mono font-bold text-xs">CO</span>
@@ -823,7 +794,6 @@
           </p>
         </div>
 
-        <!-- Formaldehyde Health Card -->
         <div class="bg-surface border border-crimson/40 rounded-3xl p-6 space-y-3.5">
           <div class="flex items-center justify-between">
             <span class="px-3 py-1 rounded-lg bg-crimson/20 text-crimson font-mono font-bold text-xs">CH₂O</span>
@@ -838,7 +808,6 @@
 
       <!-- Dynamic Live Real-Time Equivalent Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Equivalent 1: Excess NOx above BAT -->
         <div class="bg-gradient-to-l from-surface to-[#161a26] border border-crimson/40 rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
           <div class="space-y-2">
             <span class="inline-block px-3 py-1 rounded-full bg-crimson/15 text-crimson text-xs font-extrabold">
@@ -848,7 +817,7 @@
               פליטת NOx עודפת מעל תקן BAT
             </h3>
             <p class="text-xs sm:text-sm text-slate-300 font-assistant">
-              כמות הפליטה הניתנת למניעה מעל רמת טכנולוגיה מיטבית (15 מ"ג/מק"ת עם קטליזטור SCR):
+              כמות הפליטה הניתנת למניעה מעל רמת טכנולוגיה מיטבית (15 מ״ג/מק״ת עם קטליזטור SCR):
             </p>
           </div>
           <div class="mt-5 p-4 rounded-2xl bg-[#090a0f] border border-borderDark">
@@ -856,12 +825,11 @@
               0
             </div>
             <div class="text-xs sm:text-sm font-bold text-offWhite mt-1">
-              ק"ג
+              ק״ג
             </div>
           </div>
         </div>
 
-        <!-- Equivalent 2: Passenger Car Kilometers -->
         <div class="bg-gradient-to-l from-surface to-[#161a26] border border-ember/40 rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
           <div class="space-y-2">
             <span class="inline-block px-3 py-1 rounded-full bg-ember/15 text-ember text-xs font-extrabold">
@@ -900,7 +868,6 @@
             כל לחיצה על כפתורי השיתוף מייצרת הודעה עדכנית הכוללת את מספר הימים המדויק שחלף מאז <strong class="text-offWhite">22/11/2026</strong> ואת כמות הטונות של <span class="font-mono text-offWhite">NOx</span> ו-<span class="font-mono text-offWhite">CO</span> שנפלטו עד לרגע זה.
           </p>
 
-          <!-- Social Share Buttons -->
           <div class="flex flex-wrap items-center gap-3 pt-2">
             <button type="button" onclick="shareWhatsApp()"
                     class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-[#16a34a] hover:bg-[#15803d] text-white font-extrabold text-sm transition-all shadow-lg shadow-green-950/50">
@@ -932,7 +899,6 @@
           </div>
         </div>
 
-        <!-- Official Permit & Monitoring Source Box -->
         <div class="lg:col-span-5 bg-[#090a0f] border border-borderDark rounded-2xl p-5 sm:p-6 space-y-3 text-xs sm:text-sm">
           <div class="flex items-center justify-between border-b border-borderDark pb-3">
             <span class="font-extrabold text-offWhite">תיעוד ושקיפות מקורות</span>
@@ -985,18 +951,9 @@
 
   <!-- CORE APPLICATION LOGIC -->
   <script>
-    /**
-     * Original Hearing Timestamp: Sunday, November 22, 2026 at 09:00:00 IST (UTC+2)
-     */
     const HEARING_DATE_ISO = '2026-11-22T09:00:00+02:00';
     const HEARING_TIMESTAMP_MS = new Date(HEARING_DATE_ISO).getTime();
 
-    /**
-     * Exact Permit 2211 Engineering Defaults for Pump House Stacks CH6 (203712) & CH7 (203713):
-     * - Nominal Thermal Input: 33.3 MWth per engine (MAN-6 & MAN-7)
-     * - Normalized dry flue gas flow at 15% O2: 102,100 Nm^3/h per stack (204,200 Nm^3/h combined)
-     * - Permit 2211 Ceilings: NOx = 55 mg/Nm^3 daily / 50 mg/Nm^3 annual avg; CO = 40 mg/Nm^3 annual avg
-     */
     const PERMIT_DEFAULTS = {
       ch6: {
         stackId: '203712',
@@ -1013,10 +970,11 @@
     };
 
     const appState = {
-      unit: 'kg',               // 'kg' | 'tons'
-      simDaysOffset: null,      // null = real-time; number = simulated days after hearing
+      unit: 'kg',
+      simDaysOffset: null,
       simAnchorWallClock: Date.now(),
       liveDataLoaded: false,
+      manualCalibration: false,
       livePayload: null,
       config: JSON.parse(JSON.stringify(PERMIT_DEFAULTS)),
       latestSnapshot: {
@@ -1027,9 +985,6 @@
       }
     };
 
-    /**
-     * Load hourly updated data from ./data/emissions.json if present
-     */
     async function fetchLiveEmissionsJson() {
       try {
         const res = await fetch('./data/emissions.json', { cache: 'no-store' });
@@ -1045,16 +1000,17 @@
             if (typeof data.flowRatesNm3h.CH7 === 'number') appState.config.ch7.flowNm3PerHour = data.flowRatesNm3h.CH7;
           }
 
-          if (typeof data.stations.CH6.avg_NOx_mg_nm3 === 'number' && data.stations.CH6.avg_NOx_mg_nm3 > 0) {
+          // מקבלים גם ערך 0 (>= 0) כאשר המנועים בהדממה לפי ערוץ 8
+          if (typeof data.stations.CH6.avg_NOx_mg_nm3 === 'number' && data.stations.CH6.avg_NOx_mg_nm3 >= 0) {
             appState.config.ch6.noxMgNm3 = data.stations.CH6.avg_NOx_mg_nm3;
           }
-          if (typeof data.stations.CH6.avg_CO_mg_nm3 === 'number' && data.stations.CH6.avg_CO_mg_nm3 > 0) {
+          if (typeof data.stations.CH6.avg_CO_mg_nm3 === 'number' && data.stations.CH6.avg_CO_mg_nm3 >= 0) {
             appState.config.ch6.coMgNm3 = data.stations.CH6.avg_CO_mg_nm3;
           }
-          if (typeof data.stations.CH7.avg_NOx_mg_nm3 === 'number' && data.stations.CH7.avg_NOx_mg_nm3 > 0) {
+          if (typeof data.stations.CH7.avg_NOx_mg_nm3 === 'number' && data.stations.CH7.avg_NOx_mg_nm3 >= 0) {
             appState.config.ch7.noxMgNm3 = data.stations.CH7.avg_NOx_mg_nm3;
           }
-          if (typeof data.stations.CH7.avg_CO_mg_nm3 === 'number' && data.stations.CH7.avg_CO_mg_nm3 > 0) {
+          if (typeof data.stations.CH7.avg_CO_mg_nm3 === 'number' && data.stations.CH7.avg_CO_mg_nm3 >= 0) {
             appState.config.ch7.coMgNm3 = data.stations.CH7.avg_CO_mg_nm3;
           }
 
@@ -1079,9 +1035,6 @@
       }
     }
 
-    /**
-     * Physical conversion: Mass (kg) = (Concentration [mg/Nm^3] * Flow [Nm^3/h] * 1h) / 1,000,000
-     */
     function hourlyKg(mgNm3, flowNm3h) {
       return (mgNm3 * flowNm3h) / 1_000_000;
     }
@@ -1093,14 +1046,27 @@
       });
     }
 
-    /**
-     * Main 1-second render loop
-     */
+    function updateStackBadge(elementId, isShutdown, isLive) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      if (!isLive) {
+        el.textContent = 'ניטור רציף';
+        el.className = 'px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold';
+      } else if (isShutdown) {
+        el.textContent = 'בהדממה (ערוץ 8)';
+        el.className = 'px-2.5 py-1 rounded-full bg-slate-700/40 border border-slate-600/50 text-slate-300 text-xs font-bold';
+      } else {
+        el.textContent = 'ניטור רציף • פעיל';
+        el.className = 'px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold';
+      }
+    }
+
     function renderTick() {
       const wallNow = Date.now();
       let effectiveNow = wallNow;
+      const isSimMode = appState.simDaysOffset !== null;
 
-      if (appState.simDaysOffset !== null) {
+      if (isSimMode) {
         const extraSec = (wallNow - appState.simAnchorWallClock) / 1000;
         const offsetMs = (appState.simDaysOffset * 86400 + 5 * 3600 + 24 * 60 + extraSec) * 1000;
         effectiveNow = HEARING_TIMESTAMP_MS + offsetMs;
@@ -1126,7 +1092,7 @@
       if (isPreHearing) {
         titleEl.textContent = 'ספירה לאחור למועד הדיון המקורי: יום ראשון, 22/11/2026 בשעה 09:00';
         pillEl.textContent = 'השתמשו בסרגל העליון להדמיית +3, +14 או +45 ימים לאחר הדחייה';
-      } else if (appState.simDaysOffset !== null) {
+      } else if (isSimMode) {
         titleEl.textContent = `הדמיית מצב (+${appState.simDaysOffset} ימים): הזמן שחלף מאז 22/11/2026 בשעה 09:00`;
         pillEl.textContent = 'הדמיית צבירת פליטות לפי ערכי היתר 2211';
       } else {
@@ -1136,12 +1102,26 @@
 
       const elapsedHours = isPreHearing ? 0 : Math.abs(deltaMs) / 3_600_000;
 
-      const ch6NoxRate = hourlyKg(appState.config.ch6.noxMgNm3, appState.config.ch6.flowNm3PerHour);
-      const ch7NoxRate = hourlyKg(appState.config.ch7.noxMgNm3, appState.config.ch7.flowNm3PerHour);
+      // במצב הדמיה (+3/+14/+45 ימים), אם המנועים כרגע בהדממה (0), משתמשים בתקרת היתר 2211 להדגמה
+      const usePermitFallbackForSim =
+        isSimMode &&
+        !appState.manualCalibration &&
+        appState.config.ch6.noxMgNm3 === 0 &&
+        appState.config.ch7.noxMgNm3 === 0 &&
+        appState.config.ch6.coMgNm3 === 0 &&
+        appState.config.ch7.coMgNm3 === 0;
+
+      const ch6NoxConc = usePermitFallbackForSim ? PERMIT_DEFAULTS.ch6.noxMgNm3 : appState.config.ch6.noxMgNm3;
+      const ch7NoxConc = usePermitFallbackForSim ? PERMIT_DEFAULTS.ch7.noxMgNm3 : appState.config.ch7.noxMgNm3;
+      const ch6CoConc = usePermitFallbackForSim ? PERMIT_DEFAULTS.ch6.coMgNm3 : appState.config.ch6.coMgNm3;
+      const ch7CoConc = usePermitFallbackForSim ? PERMIT_DEFAULTS.ch7.coMgNm3 : appState.config.ch7.coMgNm3;
+
+      const ch6NoxRate = hourlyKg(ch6NoxConc, appState.config.ch6.flowNm3PerHour);
+      const ch7NoxRate = hourlyKg(ch7NoxConc, appState.config.ch7.flowNm3PerHour);
       const totalNoxRate = ch6NoxRate + ch7NoxRate;
 
-      const ch6CoRate = hourlyKg(appState.config.ch6.coMgNm3, appState.config.ch6.flowNm3PerHour);
-      const ch7CoRate = hourlyKg(appState.config.ch7.coMgNm3, appState.config.ch7.flowNm3PerHour);
+      const ch6CoRate = hourlyKg(ch6CoConc, appState.config.ch6.flowNm3PerHour);
+      const ch7CoRate = hourlyKg(ch7CoConc, appState.config.ch7.flowNm3PerHour);
       const totalCoRate = ch6CoRate + ch7CoRate;
 
       let ch6Hours = elapsedHours;
@@ -1151,22 +1131,35 @@
       let ch6CoKg = ch6CoRate * elapsedHours;
       let ch7CoKg = ch7CoRate * elapsedHours;
 
-      // If live scraped JSON is loaded in real-time mode and has samples > 0, anchor to scraped cumulative totals
-      if (
+      const isLiveActive =
         appState.liveDataLoaded &&
-        appState.simDaysOffset === null &&
+        !isSimMode &&
         !isPreHearing &&
         appState.livePayload &&
-        appState.livePayload.sourceStatus === 'live'
-      ) {
+        appState.livePayload.sourceStatus === 'live';
+
+      if (isLiveActive) {
         const lastSyncMs = new Date(appState.livePayload.lastUpdated).getTime();
         const extraHoursSinceSync = Math.max(0, (effectiveNow - lastSyncMs) / 3_600_000);
-        ch6Hours = (appState.livePayload.stations.CH6.samplesCount || 0) + extraHoursSinceSync;
-        ch7Hours = (appState.livePayload.stations.CH7.samplesCount || 0) + extraHoursSinceSync;
-        ch6NoxKg = (appState.livePayload.stations.CH6.NOx_kg || 0) + ch6NoxRate * extraHoursSinceSync;
-        ch7NoxKg = (appState.livePayload.stations.CH7.NOx_kg || 0) + ch7NoxRate * extraHoursSinceSync;
-        ch6CoKg = (appState.livePayload.stations.CH6.CO_kg || 0) + ch6CoRate * extraHoursSinceSync;
-        ch7CoKg = (appState.livePayload.stations.CH7.CO_kg || 0) + ch7CoRate * extraHoursSinceSync;
+        const st6 = appState.livePayload.stations.CH6;
+        const st7 = appState.livePayload.stations.CH7;
+
+        const ch6ActiveSamples = st6.samplesCount || 0;
+        const ch7ActiveSamples = st7.samplesCount || 0;
+
+        ch6Hours = ch6ActiveSamples + (ch6ActiveSamples > 0 ? extraHoursSinceSync : 0);
+        ch7Hours = ch7ActiveSamples + (ch7ActiveSamples > 0 ? extraHoursSinceSync : 0);
+
+        ch6NoxKg = (st6.NOx_kg || 0) + ch6NoxRate * extraHoursSinceSync;
+        ch7NoxKg = (st7.NOx_kg || 0) + ch7NoxRate * extraHoursSinceSync;
+        ch6CoKg = (st6.CO_kg || 0) + ch6CoRate * extraHoursSinceSync;
+        ch7CoKg = (st7.CO_kg || 0) + ch7CoRate * extraHoursSinceSync;
+
+        updateStackBadge('ch6-status-badge', ch6ActiveSamples === 0 && ch6NoxConc === 0 && ch6CoConc === 0, true);
+        updateStackBadge('ch7-status-badge', ch7ActiveSamples === 0 && ch7NoxConc === 0 && ch7CoConc === 0, true);
+      } else {
+        updateStackBadge('ch6-status-badge', false, false);
+        updateStackBadge('ch7-status-badge', false, false);
       }
 
       const totalNoxKg = ch6NoxKg + ch7NoxKg;
@@ -1179,11 +1172,9 @@
         isPreHearing
       };
 
-      // Update hourly rates
       document.getElementById('nox-rate-display').textContent = `${fmtNum(totalNoxRate, 2)} kg/h`;
       document.getElementById('co-rate-display').textContent = `${fmtNum(totalCoRate, 2)} kg/h`;
 
-      // Update main and per-stack values in kg or tons
       if (appState.unit === 'kg') {
         document.getElementById('nox-main-value').textContent = fmtNum(totalNoxKg, 2);
         document.getElementById('nox-main-unit').textContent = 'ק״ג';
@@ -1214,11 +1205,10 @@
         document.querySelectorAll('.unit-text').forEach(el => (el.textContent = 'טון'));
       }
 
-      // Stack details
-      document.getElementById('ch6-nox-conc').textContent = fmtNum(appState.config.ch6.noxMgNm3, 1);
-      document.getElementById('ch6-co-conc').textContent = fmtNum(appState.config.ch6.coMgNm3, 1);
-      document.getElementById('ch7-nox-conc').textContent = fmtNum(appState.config.ch7.noxMgNm3, 1);
-      document.getElementById('ch7-co-conc').textContent = fmtNum(appState.config.ch7.coMgNm3, 1);
+      document.getElementById('ch6-nox-conc').textContent = fmtNum(ch6NoxConc, 1);
+      document.getElementById('ch6-co-conc').textContent = fmtNum(ch6CoConc, 1);
+      document.getElementById('ch7-nox-conc').textContent = fmtNum(ch7NoxConc, 1);
+      document.getElementById('ch7-co-conc').textContent = fmtNum(ch7CoConc, 1);
 
       document.getElementById('ch6-flow-label').textContent = appState.config.ch6.flowNm3PerHour.toLocaleString('en-US');
       document.getElementById('ch7-flow-label').textContent = appState.config.ch7.flowNm3PerHour.toLocaleString('en-US');
@@ -1237,14 +1227,14 @@
       document.getElementById('co-ch6-bar').style.width = `${coShare6}%`;
       document.getElementById('co-ch7-bar').style.width = `${coShare7}%`;
 
-      // 1) Excess NOx above Best Available Technology (BAT = 15 mg/Nm^3 with SCR)
+      // Excess NOx above Best Available Technology (BAT = 15 mg/Nm^3 with SCR)
       const batLimitMgNm3 = 15;
       const ch6BatKg = hourlyKg(batLimitMgNm3, appState.config.ch6.flowNm3PerHour) * ch6Hours;
       const ch7BatKg = hourlyKg(batLimitMgNm3, appState.config.ch7.flowNm3PerHour) * ch7Hours;
       const excessNoxKg = Math.max(0, ch6NoxKg - ch6BatKg) + Math.max(0, ch7NoxKg - ch7BatKg);
       document.getElementById('equiv-air-volume').textContent = Math.round(excessNoxKg).toLocaleString('en-US');
 
-      // 2) Passenger car ~0.25g NOx/km -> 4,000 km per 1 kg NOx
+      // Passenger car ~0.25g NOx/km -> 4,000 km per 1 kg NOx
       const carKm = Math.round(totalNoxKg * 4000);
       document.getElementById('equiv-car-km').textContent = carKm.toLocaleString('en-US');
     }
@@ -1264,7 +1254,6 @@
       renderTick();
     }
 
-    // Top simulation controls
     document.querySelectorAll('.sim-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const val = btn.getAttribute('data-sim-days');
@@ -1298,6 +1287,7 @@
     }
 
     function applyManualCalibration() {
+      appState.manualCalibration = true;
       const flow = Number(document.getElementById('slider-flow-per-stack').value);
       const nox = Number(document.getElementById('slider-nox-conc').value);
       const co = Number(document.getElementById('slider-co-conc').value);
@@ -1331,6 +1321,7 @@
     }
 
     function resetCalibration() {
+      appState.manualCalibration = false;
       appState.config = JSON.parse(JSON.stringify(PERMIT_DEFAULTS));
       syncSlidersWithState();
       renderTick();
