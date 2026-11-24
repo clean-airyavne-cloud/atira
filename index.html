@@ -1235,11 +1235,27 @@
 
 // חישוב פליטת NOx עודפת מעל תקן טכנולוגיה מיטבית (BAT = 15 mg/Nm^3)
       const batLimitMgNm3 = 15;
-      const ch6 = data.stations?.CH6 || {};
-      const ch7 = data.stations?.CH7 || {};
-      const flowCh6 = data.flowRatesNm3h?.CH6 || 102100;
-      const flowCh7 = data.flowRatesNm3h?.CH7 || 102100;
+      const src =
+        (typeof data !== 'undefined' && data) ||
+        (typeof json !== 'undefined' && json) ||
+        (typeof payload !== 'undefined' && payload) ||
+        (typeof d !== 'undefined' && d) ||
+        (typeof res !== 'undefined' && res) ||
+        (typeof emissions !== 'undefined' && emissions) ||
+        {};
 
+      const ch6 = src.stations?.CH6 || {};
+      const ch7 = src.stations?.CH7 || {};
+      const flowCh6 = src.flowRatesNm3h?.CH6 || 102100;
+      const flowCh7 = src.flowRatesNm3h?.CH7 || 102100;
+
+      const ch6BatKg = (batLimitMgNm3 * flowCh6 * (ch6.samplesCount || 0)) / 1_000_000;
+      const ch7BatKg = (batLimitMgNm3 * flowCh7 * (ch7.samplesCount || 0)) / 1_000_000;
+
+      const excessNoxKg =
+        Math.max(0, (ch6.NOx_kg || 0) - ch6BatKg) +
+        Math.max(0, (ch7.NOx_kg || 0) - ch7BatKg);
+      document.getElementById('equiv-air-volume').textContent = fmtNum(Math.round(excessNoxKg));
       const ch6BatKg = (batLimitMgNm3 * flowCh6 * (ch6.samplesCount || 0)) / 1_000_000;
       const ch7BatKg = (batLimitMgNm3 * flowCh7 * (ch7.samplesCount || 0)) / 1_000_000;
 
