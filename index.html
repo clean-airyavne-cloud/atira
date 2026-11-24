@@ -838,11 +838,11 @@
 
       <!-- Dynamic Live Real-Time Equivalent Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Equivalent 1: Polluted Air Volume above Target Value -->
+        <!-- Equivalent 1: Excess NOx above BAT -->
         <div class="bg-gradient-to-l from-surface to-[#161a26] border border-crimson/40 rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
           <div class="space-y-2">
             <span class="inline-block px-3 py-1 rounded-full bg-crimson/15 text-crimson text-xs font-extrabold">
-              המחשה דינמית בזמן אמת • נפח אוויר מזוהם
+              המחשה דינמית בזמן אמת • פליטה עודפת (BAT)
             </span>
             <h3 class="text-xl font-black text-offWhite">
               פליטת NOx עודפת מעל תקן BAT
@@ -1144,6 +1144,8 @@
       const ch7CoRate = hourlyKg(appState.config.ch7.coMgNm3, appState.config.ch7.flowNm3PerHour);
       const totalCoRate = ch6CoRate + ch7CoRate;
 
+      let ch6Hours = elapsedHours;
+      let ch7Hours = elapsedHours;
       let ch6NoxKg = ch6NoxRate * elapsedHours;
       let ch7NoxKg = ch7NoxRate * elapsedHours;
       let ch6CoKg = ch6CoRate * elapsedHours;
@@ -1159,6 +1161,8 @@
       ) {
         const lastSyncMs = new Date(appState.livePayload.lastUpdated).getTime();
         const extraHoursSinceSync = Math.max(0, (effectiveNow - lastSyncMs) / 3_600_000);
+        ch6Hours = (appState.livePayload.stations.CH6.samplesCount || 0) + extraHoursSinceSync;
+        ch7Hours = (appState.livePayload.stations.CH7.samplesCount || 0) + extraHoursSinceSync;
         ch6NoxKg = (appState.livePayload.stations.CH6.NOx_kg || 0) + ch6NoxRate * extraHoursSinceSync;
         ch7NoxKg = (appState.livePayload.stations.CH7.NOx_kg || 0) + ch7NoxRate * extraHoursSinceSync;
         ch6CoKg = (appState.livePayload.stations.CH6.CO_kg || 0) + ch6CoRate * extraHoursSinceSync;
@@ -1233,36 +1237,12 @@
       document.getElementById('co-ch6-bar').style.width = `${coShare6}%`;
       document.getElementById('co-ch7-bar').style.width = `${coShare7}%`;
 
-// חישוב פליטת NOx עודפת מעל תקן טכנולוגיה מיטבית (BAT = 15 mg/Nm^3)
+      // 1) Excess NOx above Best Available Technology (BAT = 15 mg/Nm^3 with SCR)
       const batLimitMgNm3 = 15;
-      const src =
-        (typeof data !== 'undefined' && data) ||
-        (typeof json !== 'undefined' && json) ||
-        (typeof payload !== 'undefined' && payload) ||
-        (typeof d !== 'undefined' && d) ||
-        (typeof res !== 'undefined' && res) ||
-        (typeof emissions !== 'undefined' && emissions) ||
-        {};
-
-      const ch6 = src.stations?.CH6 || {};
-      const ch7 = src.stations?.CH7 || {};
-      const flowCh6 = src.flowRatesNm3h?.CH6 || 102100;
-      const flowCh7 = src.flowRatesNm3h?.CH7 || 102100;
-
-      const ch6BatKg = (batLimitMgNm3 * flowCh6 * (ch6.samplesCount || 0)) / 1_000_000;
-      const ch7BatKg = (batLimitMgNm3 * flowCh7 * (ch7.samplesCount || 0)) / 1_000_000;
-
-      const excessNoxKg =
-        Math.max(0, (ch6.NOx_kg || 0) - ch6BatKg) +
-        Math.max(0, (ch7.NOx_kg || 0) - ch7BatKg);
-      document.getElementById('equiv-air-volume').textContent = fmtNum(Math.round(excessNoxKg));
-      const ch6BatKg = (batLimitMgNm3 * flowCh6 * (ch6.samplesCount || 0)) / 1_000_000;
-      const ch7BatKg = (batLimitMgNm3 * flowCh7 * (ch7.samplesCount || 0)) / 1_000_000;
-
-      const excessNoxKg =
-        Math.max(0, (ch6.NOx_kg || 0) - ch6BatKg) +
-        Math.max(0, (ch7.NOx_kg || 0) - ch7BatKg);
-      document.getElementById('equiv-air-volume').textContent = fmtNum(Math.round(excessNoxKg));
+      const ch6BatKg = hourlyKg(batLimitMgNm3, appState.config.ch6.flowNm3PerHour) * ch6Hours;
+      const ch7BatKg = hourlyKg(batLimitMgNm3, appState.config.ch7.flowNm3PerHour) * ch7Hours;
+      const excessNoxKg = Math.max(0, ch6NoxKg - ch6BatKg) + Math.max(0, ch7NoxKg - ch7BatKg);
+      document.getElementById('equiv-air-volume').textContent = Math.round(excessNoxKg).toLocaleString('en-US');
 
       // 2) Passenger car ~0.25g NOx/km -> 4,000 km per 1 kg NOx
       const carKm = Math.round(totalNoxKg * 4000);
