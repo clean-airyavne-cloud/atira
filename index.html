@@ -845,10 +845,10 @@
               המחשה דינמית בזמן אמת • נפח אוויר מזוהם
             </span>
             <h3 class="text-xl font-black text-offWhite">
-              נפח האוויר הנקי הנדרש למיהול הפליטה
+              פליטת NOx עודפת מעל תקן BAT
             </h3>
             <p class="text-xs sm:text-sm text-slate-300 font-assistant">
-              כמות האוויר הנקי הדרושה למהילת תחמוצות החנקן (NOx) שנפלטו לרמת ערך היעד של NO₂:
+              כמות הפליטה הניתנת למניעה מעל רמת טכנולוגיה מיטבית (15 מ"ג/מק"ת עם קטליזטור SCR):
             </p>
           </div>
           <div class="mt-5 p-4 rounded-2xl bg-[#090a0f] border border-borderDark">
@@ -856,7 +856,7 @@
               0
             </div>
             <div class="text-xs sm:text-sm font-bold text-offWhite mt-1">
-              מיליון מטר מעוקב (מ״ק) של אוויר
+              ק"ג
             </div>
           </div>
         </div>
@@ -1233,10 +1233,20 @@
       document.getElementById('co-ch6-bar').style.width = `${coShare6}%`;
       document.getElementById('co-ch7-bar').style.width = `${coShare7}%`;
 
-      // Dynamic Real-Time Equivalents:
-      // 1) 1 kg NOx = 1,000,000,000 µg -> divided by 10 µg/m^3 target value = 100,000,000 m^3 = 100 million m^3
-      const millionCubicMetersAir = totalNoxKg * 100;
-      document.getElementById('equiv-air-volume').textContent = fmtNum(millionCubicMetersAir, 1);
+// חישוב פליטת NOx עודפת מעל תקן טכנולוגיה מיטבית (BAT = 15 mg/Nm^3)
+      const batLimitMgNm3 = 15;
+      const ch6 = data.stations?.CH6 || {};
+      const ch7 = data.stations?.CH7 || {};
+      const flowCh6 = data.flowRatesNm3h?.CH6 || 102100;
+      const flowCh7 = data.flowRatesNm3h?.CH7 || 102100;
+
+      const ch6BatKg = (batLimitMgNm3 * flowCh6 * (ch6.samplesCount || 0)) / 1_000_000;
+      const ch7BatKg = (batLimitMgNm3 * flowCh7 * (ch7.samplesCount || 0)) / 1_000_000;
+
+      const excessNoxKg =
+        Math.max(0, (ch6.NOx_kg || 0) - ch6BatKg) +
+        Math.max(0, (ch7.NOx_kg || 0) - ch7BatKg);
+      document.getElementById('equiv-air-volume').textContent = fmtNum(Math.round(excessNoxKg));
 
       // 2) Passenger car ~0.25g NOx/km -> 4,000 km per 1 kg NOx
       const carKm = Math.round(totalNoxKg * 4000);
