@@ -304,6 +304,24 @@ def parse_timestamp(ts_str: str) -> datetime:
     return dt.astimezone(IST)
 
 
+def is_unit_operating(status_val) -> bool:
+    """
+    מזהה האם היחידה פעילה לפי ערוץ 8:
+    הפורטל מחזיר לרוב מחרוזת 'Opr' (Operating), או ערך מספרי גדול מ-0.
+    """
+    if status_val is None:
+        return False
+    if isinstance(status_val, (int, float)):
+        return float(status_val) > 0
+    s = str(status_val).strip().lower()
+    if s in {"opr", "operating", "on", "run", "running", "active", "true", "1"}:
+        return True
+    try:
+        return float(s) > 0
+    except ValueError:
+        return False
+
+
 def extract_channel_values(item: dict, cfg: dict) -> tuple:
     nox_val = None
     co_val = None
@@ -322,11 +340,18 @@ def extract_channel_values(item: dict, cfg: dict) -> tuple:
 
             ch_id = str(ch.get("id", ch.get("channelId", ""))).strip()
             if ch_id == nox_id:
-                nox_val = float(val)
+                try:
+                    nox_val = float(val)
+                except (ValueError, TypeError):
+                    nox_val = None
             elif ch_id == co_id:
-                co_val = float(val)
+                try:
+                    co_val = float(val)
+                except (ValueError, TypeError):
+                    co_val = None
             elif ch_id == status_id:
-                status_val = float(val)
+                # שומרים את הערך הגולמי של ערוץ 8 (יכול להיות 'Opr' או מספר)
+                status_val = val
 
     return nox_val, co_val, status_val
 
@@ -362,8 +387,8 @@ def calculate_station_totals(records: list, station_key: str, cfg: dict) -> dict
         nox_val, co_val, status_val = by_time[dt]
 
         # סינון שעות הדממה לפי ערוץ 8 (Unit Status):
-        # כאשר המנוע כבוי (סטטוס <= 0 או חסר), מדלגים כדי לא לספור רעש רקע של חיישנים
-        if has_status_channel and (status_val is None or status_val <= 0):
+        # סופרים פליטות רק כאשר היחידה פעילה ('Opr' או ערך חיובי)
+        if has_status_channel and not is_unit_operating(status_val):
             shutdown_hours += 1
             continue
 
