@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-24T11:01:10.850060+02:00",
+  "lastUpdated": "2026-11-24T11:31:33.972411+02:00",
   "startDate": "2026-11-22T09:00:00+02:00",
   "permitNumber": "2211",
   "siteId": "360767",
@@ -14,14 +14,16 @@
       "CO_kg": 0.0,
       "avg_NOx_mg_nm3": 0,
       "avg_CO_mg_nm3": 0,
-      "samplesCount": 0
+      "samplesCount": 0,
+      "shutdownHours": 0
     },
     "CH7": {
       "NOx_kg": 0.0,
       "CO_kg": 0.0,
       "avg_NOx_mg_nm3": 0,
       "avg_CO_mg_nm3": 0,
-      "samplesCount": 0
+      "samplesCount": 0,
+      "shutdownHours": 0
     }
   },
   "totals": {
