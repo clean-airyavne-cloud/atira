@@ -49,12 +49,14 @@ STATIONS_CONFIG = {
         "filter_channels": get_env_str("CH6_CHANNELS", "2,4,8"),
         "nox_channel_id": get_env_str("CH6_NOX_CHANNEL_ID", "2"),
         "co_channel_id": get_env_str("CH6_CO_CHANNEL_ID", "4"),
+        "status_channel_id": get_env_str("CH6_STATUS_CHANNEL_ID", "8"),
     },
     "CH7": {
         "station_id": get_env_str("CH7_STATION_ID", "462"),
         "filter_channels": get_env_str("CH7_CHANNELS", "2,4,8"),
         "nox_channel_id": get_env_str("CH7_NOX_CHANNEL_ID", "2"),
         "co_channel_id": get_env_str("CH7_CO_CHANNEL_ID", "4"),
+        "status_channel_id": get_env_str("CH7_STATUS_CHANNEL_ID", "8"),
     },
 }
 
@@ -305,8 +307,11 @@ def parse_timestamp(ts_str: str) -> datetime:
 def extract_channel_values(item: dict, cfg: dict) -> tuple:
     nox_val = None
     co_val = None
+    status_val = None
+
     nox_id = str(cfg.get("nox_channel_id", "")).strip()
     co_id = str(cfg.get("co_channel_id", "")).strip()
+    status_id = str(cfg.get("status_channel_id", "8")).strip()
 
     channels = item.get("channels", [])
     if isinstance(channels, list):
@@ -320,13 +325,16 @@ def extract_channel_values(item: dict, cfg: dict) -> tuple:
                 nox_val = float(val)
             elif ch_id == co_id:
                 co_val = float(val)
+            elif ch_id == status_id:
+                status_val = float(val)
 
-    return nox_val, co_val
+    return nox_val, co_val, status_val
 
 
 def calculate_station_totals(records: list, station_key: str, cfg: dict) -> dict:
     flow_rate = FLOW_RATES_NM3_H[station_key]
     by_time = {}
+    has_status_channel = False
 
     for item in records:
         ts_raw = item.get("datetime") or item.get("date") or item.get("time")
@@ -335,8 +343,10 @@ def calculate_station_totals(records: list, station_key: str, cfg: dict) -> dict
         dt = parse_timestamp(ts_raw)
         if dt < START_TIME:
             continue
-        nox_val, co_val = extract_channel_values(item, cfg)
-        by_time[dt] = (nox_val, co_val)
+        nox_val, co_val, status_val = extract_channel_values(item, cfg)
+        if status_val is not None:
+            has_status_channel = True
+        by_time[dt] = (nox_val, co_val, status_val)
 
     sorted_times = sorted(by_time.keys())
     total_nox_kg = 0.0
@@ -345,9 +355,20 @@ def calculate_station_totals(records: list, station_key: str, cfg: dict) -> dict
     co_sum = 0.0
     nox_count = 0
     co_count = 0
+    active_hours = 0
+    shutdown_hours = 0
 
     for idx, dt in enumerate(sorted_times):
-        nox_val, co_val = by_time[dt]
+        nox_val, co_val, status_val = by_time[dt]
+
+        # סינון שעות הדממה לפי ערוץ 8 (Unit Status):
+        # כאשר המנוע כבוי (סטטוס <= 0 או חסר), מדלגים כדי לא לספור רעש רקע של חיישנים
+        if has_status_channel and (status_val is None or status_val <= 0):
+            shutdown_hours += 1
+            continue
+
+        active_hours += 1
+
         if idx > 0:
             delta_h = (dt - sorted_times[idx - 1]).total_seconds() / 3600.0
             duration_h = delta_h if 0 < delta_h <= 2.0 else 1.0
@@ -369,7 +390,8 @@ def calculate_station_totals(records: list, station_key: str, cfg: dict) -> dict
         "CO_kg": round(total_co_kg, 2),
         "avg_NOx_mg_nm3": round(nox_sum / nox_count, 2) if nox_count else 0,
         "avg_CO_mg_nm3": round(co_sum / co_count, 2) if co_count else 0,
-        "samplesCount": max(nox_count, co_count),
+        "samplesCount": active_hours,
+        "shutdownHours": shutdown_hours,
     }
 
 
@@ -383,8 +405,22 @@ def write_initial_json():
         "sourceStatus": "initialized",
         "flowRatesNm3h": FLOW_RATES_NM3_H,
         "stations": {
-            "CH6": {"NOx_kg": 0, "CO_kg": 0, "avg_NOx_mg_nm3": 0, "avg_CO_mg_nm3": 0, "samplesCount": 0},
-            "CH7": {"NOx_kg": 0, "CO_kg": 0, "avg_NOx_mg_nm3": 0, "avg_CO_mg_nm3": 0, "samplesCount": 0},
+            "CH6": {
+                "NOx_kg": 0,
+                "CO_kg": 0,
+                "avg_NOx_mg_nm3": 0,
+                "avg_CO_mg_nm3": 0,
+                "samplesCount": 0,
+                "shutdownHours": 0,
+            },
+            "CH7": {
+                "NOx_kg": 0,
+                "CO_kg": 0,
+                "avg_NOx_mg_nm3": 0,
+                "avg_CO_mg_nm3": 0,
+                "samplesCount": 0,
+                "shutdownHours": 0,
+            },
         },
         "totals": {"NOx_kg": 0, "CO_kg": 0, "NOx_tons": 0, "CO_tons": 0},
     }
@@ -436,13 +472,24 @@ def main():
         try:
             records = fetch_station_data(client, cfg, START_TIME, now_ist)
             stations_result[st_key] = calculate_station_totals(records, st_key, cfg)
-            print(f"[{st_key}] עודכן בהצלחה: {stations_result[st_key]}")
+            print(
+                f"[{st_key}] עודכן בהצלחה | שעות פעילות: {stations_result[st_key]['samplesCount']} | "
+                f"שעות הדממה שסוננו: {stations_result[st_key]['shutdownHours']} | "
+                f"נתונים: {stations_result[st_key]}"
+            )
         except Exception as exc:
             all_ok = False
             print(f"[{st_key}] שגיאה במשיכת נתונים: {exc}")
             stations_result[st_key] = existing_data.get("stations", {}).get(
                 st_key,
-                {"NOx_kg": 0, "CO_kg": 0, "avg_NOx_mg_nm3": 0, "avg_CO_mg_nm3": 0, "samplesCount": 0},
+                {
+                    "NOx_kg": 0,
+                    "CO_kg": 0,
+                    "avg_NOx_mg_nm3": 0,
+                    "avg_CO_mg_nm3": 0,
+                    "samplesCount": 0,
+                    "shutdownHours": 0,
+                },
             )
 
     total_nox_kg = round(stations_result["CH6"]["NOx_kg"] + stations_result["CH7"]["NOx_kg"], 2)
